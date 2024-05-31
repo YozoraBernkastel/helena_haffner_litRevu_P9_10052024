@@ -1,0 +1,19 @@
+
+{% extends 'litRevu/layout.html' %}
+{% block content %}
+    <p>{{ message }}</p>
+    <section>
+        <div>
+            <p>Inscrivez-vous maintenant</p>
+                <a href="{% url 'signup' %}">S'inscrire</a>
+        </div>
+        <div>
+            <p>Connectez-vous</p>
+            <form method="post">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <button type="submit" >Se connecter</button>
+            </form>
+        </div>
+    </section>
+{% endblock content %}
