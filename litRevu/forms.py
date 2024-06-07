@@ -17,7 +17,7 @@ class TicketReviewCreationForm(forms.ModelForm):
         fields = ("rating", "headline", "body", "user")
 
 
-# class ReviewCreationForm(forms.ModelForm):
-#     class Meta:
-#         model = Review
-#         fields = ("ticket", "rating", "headline", "body", "user")
+class ReviewCreationForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ("ticket", "rating", "headline", "body", "user")

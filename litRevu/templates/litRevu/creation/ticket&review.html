@@ -5,9 +5,8 @@
     <form action="post">
         <article>
             <h1>Livre / article</h1>
-            <p>Importer data de la BDD</p>
-<!--            {% csrf_token %}-->
-<!--            {{ form2.as_p }}-->
+            {% csrf_token %}
+            {{ form2.as_p }}
         </article>
         <article>
              <h1>Critique</h1>
@@ -20,3 +19,7 @@
 
 </section>
 {% endblock content %}
+
+
+
+
