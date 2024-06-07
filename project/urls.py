@@ -18,10 +18,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LoginView, LogoutView
+
+import litRevu.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
+    path("", LoginView.as_view(template_name='authentication/login.html',
+                               redirect_authenticated_user=True), name="login"),
+    path("logout", LogoutView.as_view(), name="logout"),
+    path("home", litRevu.views.home, name="home"),
+    path("signup", litRevu.views.SignupPage.as_view(), name="signup"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
