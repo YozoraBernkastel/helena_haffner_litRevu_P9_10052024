@@ -2,16 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LitRevu</title>
+    <title>LITReview</title>
 </head>
 <body>
-    <header><h1>LitRevu</h1></header>
+    <header><h1>LITReview</h1></header>
     {% if user.is_authenticated %}
-            <p>{{ request.user }}.</p>
-            <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button type="submit">Déconnexion</button>
+            <ul>
+                <li>Flux</li>
+                <li>Posts</li>
+                <li>Abonnements</li>
+                <li>
+                    <form method="post" action="{% url 'auth:logout' %}">
+                  {% csrf_token %}
+                  <button type="submit">Se déconnecter</button>
             </form>
+                </li>
+            </ul>
+
     {% endif %}
     {% block content %}{% endblock content %}
 

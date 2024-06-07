@@ -1,60 +1,48 @@
-from django.shortcuts import render, redirect
-from . import forms
-from django.conf import settings
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
-from django.views.generic import View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, View
+from django.shortcuts import render, redirect
+import litRevu.forms
+from litRevu.forms import TicketCreationForm, TicketReviewCreationForm
+from django.utils.decorators import method_decorator
 
-
-# class LoginPageView(View):
-#     template_name = 'authentication/login.html'
-#     form_class = forms.LoginForm
-#
-#     def get(self, request):
-#         form = self.form_class()
-#         message = ""
-#         return render(request, self.template_name, context={"form": form, 'message': message})
-#
-#     def post(self, request):
-#         form = forms.LoginForm(request.POST)
-#
-#         if request.method == 'POST':
-#             form = forms.LoginForm(request.POST)
-#             if form.is_valid():
-#                 user = authenticate(
-#                     username=form.cleaned_data["username"],
-#                     password=form.cleaned_data["password"],
-#                 )
-#                 if user is not None:
-#                     login(request, user)
-#                     return redirect("home")
-#
-#         message = "Identifiants invalides. Veuillez réessayer."
-#         return render(request, self.template_name, context={'form': form, "message": message})
 
 @login_required()
 def home(request):
     return render(request, "litRevu/home.html")
 
 
-class SignupPage(View):
-    template_name = "authentication/signup.html"
-    form = forms.SignupForm
+@method_decorator(login_required, name='dispatch')
+class TicketCreationView(CreateView):
+    template_name = "litRevu/creation/ticket.html"
+    form_class = TicketCreationForm
+
+
+@method_decorator(login_required, name='dispatch')
+class TicketReviewCreationView(View):
+    template_name = "litRevu/creation/review.html"
+    form = litRevu.forms.TicketReviewCreationForm
+    form2 = litRevu.forms.TicketCreationForm
 
     def get(self, request):
-        form = forms.SignupForm()
-        return render(request, self.template_name, context={"form": form})
+        form = litRevu.forms.TicketReviewCreationForm()
+        form2 = litRevu.forms.TicketCreationForm()
+        return render(request, self.template_name, context={"form": form, "form2": form2})
 
     def post(self, request):
-        form = forms.SignupForm(request.POST)
+        form = litRevu.forms.TicketReviewCreationForm(request.POST)
         if request.method == "POST":
-            form = forms.SignupForm(request.POST)
+            form = litRevu.forms.TicketReviewCreationForm(request.POST)
             if form.is_valid():
-                user = form.save()
-                login(request, user)
-                return redirect(settings.LOGIN_REDIRECT_URL)
+                form.save()
+                return redirect("home")
 
         return render(request, self.template_name, context={"form": form})
+
+
+class ReviewCreationView(TicketReviewCreationForm):
+    template_name = "blabla"
+
+
 
 
