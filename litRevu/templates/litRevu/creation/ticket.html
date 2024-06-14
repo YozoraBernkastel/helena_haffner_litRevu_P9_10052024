@@ -1,7 +1,7 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
 <h1>Créer un ticket</h1>
-<form action="post">
+<form method="post">
     {% csrf_token %}
     {{ form }}
 

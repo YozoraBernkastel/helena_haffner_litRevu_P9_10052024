@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model
 
 
 class SignupForm(UserCreationForm):
@@ -8,6 +9,10 @@ class SignupForm(UserCreationForm):
         self.fields["username"].help_text = None
         self.fields["password1"].help_text = None
         self.fields["password2"].help_text = None
+
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'password1', 'password2',)
 
 
 class LoginForm(forms.Form):

@@ -1,4 +1,8 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
-    <p>Vous êtes connecté !</p>
+<div>
+    <a href="{% url 'litrevu:ticket_creation' %}" class="reviewButton">Demander une critique</a>
+    <a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Créer une critique</a>
+</div>
+
 {% endblock content %}

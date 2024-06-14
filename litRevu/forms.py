@@ -11,13 +11,10 @@ class TicketCreationForm(forms.ModelForm):
         success_url = reverse_lazy('home')
 
 
-class TicketReviewCreationForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ("rating", "headline", "body", "user")
-
-
 class ReviewCreationForm(forms.ModelForm):
+    CHOICES = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
+    notes = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+
     class Meta:
         model = Review
-        fields = ("ticket", "rating", "headline", "body", "user")
+        fields = ("headline", "notes", "headline", "body")

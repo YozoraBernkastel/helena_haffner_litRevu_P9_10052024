@@ -5,12 +5,17 @@
     <title>LITReview</title>
 </head>
 <body>
-    <header><h1>LITReview</h1></header>
+    <header><h1><a href="{% url 'home' %}">LITReview</a></h1></header>
     {% if user.is_authenticated %}
             <ul>
                 <li>Flux</li>
                 <li>Posts</li>
                 <li>Abonnements</li>
+                {% if user.is_superuser %}
+                <li>
+                    <a href="">Admin</a>
+                </li>
+                {% endif %}
                 <li>
                     <form method="post" action="{% url 'auth:logout' %}">
                   {% csrf_token %}
