@@ -13,8 +13,8 @@ class TicketCreationForm(forms.ModelForm):
 
 class ReviewCreationForm(forms.ModelForm):
     CHOICES = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
-    notes = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    note = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
 
     class Meta:
         model = Review
-        fields = ("headline", "notes", "headline", "body")
+        fields = ("headline", "note", "headline", "body")

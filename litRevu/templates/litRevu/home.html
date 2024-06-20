@@ -4,5 +4,12 @@
     <a href="{% url 'litrevu:ticket_creation' %}" class="reviewButton">Demander une critique</a>
     <a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Créer une critique</a>
 </div>
+<div>
+    {% for ticket in tickets %}
+         <article>
+             {% include 'litRevu/ticket_content.html' %}
+         </article>
+    {% endfor %}
+</div>
 
 {% endblock content %}

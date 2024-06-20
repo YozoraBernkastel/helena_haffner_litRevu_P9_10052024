@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.shortcuts import render, redirect
-import litRevu.forms
 from litRevu.forms import TicketCreationForm, ReviewCreationForm
 from django.utils.decorators import method_decorator
 from litRevu.models import Ticket, Review
@@ -10,7 +9,8 @@ from litRevu.models import Ticket, Review
 
 @login_required()
 def home(request):
-    return render(request, "litRevu/home.html")
+    tickets = Ticket.objects.all()
+    return render(request, "litRevu/home.html", {"tickets": tickets})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -26,10 +26,6 @@ class TicketCreationView(CreateView):
 
 @method_decorator(login_required, name='dispatch')
 class ReviewCreationView(CreateView):
-    # ressemble à TicketReviewCreationView mais la partie correspondant au ticket
-    # doit afficher les infos du ticket sélectionner et donc il ne faut envoyer que les données
-    # de la review à la base de données (peut-être plus simple que TicketReview pour commencer)
-    # Il faudra surement hériter d'une autre classe
     template_name = "litRevu/creation/review.html"
     form_class = ReviewCreationForm
 
@@ -38,14 +34,16 @@ class ReviewCreationView(CreateView):
         form.instance.rating = self.request.notes
         return super().form_valid(form)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, id):
         form = ReviewCreationForm()
-        # self.request.title.
-        pass
+        ticket = Ticket.objects.get(pk=id)
+        return render(request, self.template_name, context={"form": form, "ticket": ticket})
 
     def post(self, request, *args, **kwargs):
         if request.method == "POST":
             form = ReviewCreationForm(request.POST)
+            print(self.request)
+            Review.objects.create(user=self.request.user, rating=request.POST.get("note"), ticket_id=request.POST.get("ticket_id"))
             if form.is_valid():
                 form.save()
                 return redirect("home")
@@ -60,6 +58,8 @@ class TicketReviewCreationView(View):
     form2 = TicketCreationForm
 
     def get(self, request):
+        # todo Créer un CreationForm unique dans lequel on fusionne review et ticket afin de faciliter les choses à l'envoi ?
+        # todo Peut-être tester avant, histoire de voir si on peut les trouver dans request.cleaned_data
         form = ReviewCreationForm()
         form2 = TicketCreationForm()
         return render(request, self.template_name, context={"form": form, "form2": form2})

@@ -1,17 +1,20 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
 <section>
+    <h1>Créer une critique</h1>
+
+    <article>
+        <p>Vous êtes en train de poster en réponse à</p>
+        {% include 'litRevu/ticket_content.html' %}
+
+    </article>
 
     <form method="post">
-        <article>
-            <h1>Livre / article</h1>
-            <p>Importer data de la BDD</p>
-<!--            {% csrf_token %}-->
-<!--            {{ form2.as_p }}-->
-        </article>
+
         <article>
              <h1>Critique</h1>
             {% csrf_token %}
+            <input type="text" id="ticket_id" name="ticket_id" value="{{ ticket.id }}" hidden>
             {{ form.as_p }}
         </article>
 
