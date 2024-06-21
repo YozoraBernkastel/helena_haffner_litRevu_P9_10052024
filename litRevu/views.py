@@ -2,15 +2,30 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.shortcuts import render, redirect, get_object_or_404
-from litRevu.forms import TicketCreationForm, ReviewCreationForm
+from litRevu.forms import TicketCreationForm, ReviewCreationForm, SubscribeCreationForm
 from django.utils.decorators import method_decorator
-from litRevu.models import Ticket, Review
+from litRevu.models import Ticket, UserFollows
 
 
 @login_required()
 def home(request):
     tickets = Ticket.objects.all()
     return render(request, "litRevu/home.html", {"tickets": tickets})
+
+
+@method_decorator(login_required, name='dispatch')
+class SubCreationView(CreateView):
+    template_name = "litRevu/subscribe.html"
+    form_class = SubscribeCreationForm
+
+    # todo BOF
+    def get(self, request, *args, **kwargs):
+        form_class = SubscribeCreationForm()
+        subs = UserFollows.objects.filter(user=self.request.user)
+        followers = UserFollows.objects.filter(followed_user=self.request.user)
+        success_url = reverse_lazy("sub_page")
+
+        return render(request, self.template_name, {"subs": subs, "followers": followers})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -48,10 +63,7 @@ class ReviewCreationView(CreateView):
     def form_valid(self, form):
         form.instance.rating = form.cleaned_data["note"]
         form.instance.user = self.request.user
-        # appelle la base de données pour récupérer le ticket -> permet de vérifier si le ticket existe ! (mais plus couteux)
         form.instance.ticket = self.ticket
-        # mode moins couteux mais risqué car pas de vérification qu'un objet avec cet id existe
-        # form.instance.ticket_id = self.kwargs["id"]
 
         return super().form_valid(form)
 

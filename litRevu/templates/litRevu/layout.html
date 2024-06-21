@@ -10,7 +10,7 @@
             <ul>
                 <li>Flux</li>
                 <li>Posts</li>
-                <li>Abonnements</li>
+                <li><a href="{% url 'litrevu:sub_page' %}">Abonnements</a></li>
                 {% if user.is_superuser %}
                 <li>
                     <a href="">Admin</a>

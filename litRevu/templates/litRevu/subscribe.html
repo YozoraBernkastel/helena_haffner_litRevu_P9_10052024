@@ -1,0 +1,37 @@
+{% extends 'litRevu/layout.html' %}
+{% block content %}
+
+<section id="subscribe_page">
+    <article>
+        <h1>Suivre d'autres utilisateurs</h1>
+
+        <form action="" class="search_bar">
+            <p>barre de recherche à créer</p>
+            <button type="submit" >Envoyer</button>
+        </form>
+    </article>
+
+    <article>
+        <h1>Abonnements</h1>
+        <ul>
+            {% for sub in subs %}
+            <li class="sub">
+<!--                 un formulaire à la place avec rechargement de page ?  J'aimerais bien ne pas avoir à recharger la page -->
+                <p class="subscribe_user">{{ sub.user }}</p>
+                <div class="unsubscribe_user">Désabonner</div>
+            </li>
+            {% endfor %}
+        </ul>
+    </article>
+
+    <article>
+        <h1>Abonnés</h1>
+        <ul>
+            {% for follower in followers %}
+            <li class="follower_li">{{ follower.user }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+</section>
+
+{% endblock content %}

@@ -15,6 +15,7 @@
              <h1>Critique</h1>
             {% csrf_token %}
             {{ form }}
+            <a href="{% url 'litrevu:review_creation' ticket.id %}" class="review_creation_button">Créer une critique</a>
         </article>
 
         <button type="submit" >Envoyer</button>
