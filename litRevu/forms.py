@@ -18,3 +18,6 @@ class ReviewCreationForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ("headline", "note", "headline", "body")
+
+
+# utiliser Form et non pas ModelForm si j'en viens à faire un gros formulaire combinant les deux

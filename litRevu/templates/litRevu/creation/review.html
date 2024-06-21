@@ -14,8 +14,7 @@
         <article>
              <h1>Critique</h1>
             {% csrf_token %}
-            <input type="text" id="ticket_id" name="ticket_id" value="{{ ticket.id }}" hidden>
-            {{ form.as_p }}
+            {{ form }}
         </article>
 
         <button type="submit" >Envoyer</button>

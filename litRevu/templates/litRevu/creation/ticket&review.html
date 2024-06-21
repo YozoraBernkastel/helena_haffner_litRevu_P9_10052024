@@ -6,12 +6,12 @@
         <article>
             <h1>Livre / article</h1>
             {% csrf_token %}
-            {{ form2.as_p }}
+            {{ form.as_p }}
         </article>
         <article>
              <h1>Critique</h1>
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form2.as_p }}
         </article>
 
         <button type="submit" >Envoyer</button>
