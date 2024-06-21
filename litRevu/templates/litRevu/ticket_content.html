@@ -1,0 +1,21 @@
+
+<div>
+
+    <div>
+        {% if request.user == ticket.user %}
+            <p>Vous avez demandé une critique</p>
+        {% else %}
+            <p class="type of post">{{ ticket.user }} a demandé une critique</p>
+         {% endif %}
+
+        <p class="date">{{ ticket.time_created }}</p>
+    </div>
+    <p class="book_title">{{ ticket.title }}</p>
+
+<!--    todo vérifier si le champs est rempli avant d'afficher !!-->
+    <p class="description">{{ ticket.description }}</p>
+    <!--    todo vérifier si le champs est rempli avant d'afficher + afficher l'image plutôt que le lien vers elle!!-->
+    <img src="{{ ticket.image }}" alt="">
+
+    <a href="{% url 'litrevu:review_creation' ticket.id %}" class="review_creation_button">Créer une critique</a>
+</div>

@@ -1,15 +1,23 @@
 from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+
+from litRevu.models import Ticket, Review
 
 
-class SignupForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        model = get_user_model()
-        fields = ("username",)
-        help_texts = {"username": None}
+class TicketCreationForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ("title", "description", "image")
+        success_url = reverse_lazy('home')
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=63, label="Nom d'utilisateur")
-    password = forms.CharField(max_length=63, widget=forms.PasswordInput, label="Mot de passe")
+class ReviewCreationForm(forms.ModelForm):
+    CHOICES = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
+    note = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+
+    class Meta:
+        model = Review
+        fields = ("headline", "note", "headline", "body")
+
+
+# utiliser Form et non pas ModelForm si j'en viens à faire un gros formulaire combinant les deux

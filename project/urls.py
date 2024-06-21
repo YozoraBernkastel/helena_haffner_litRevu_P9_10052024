@@ -27,9 +27,9 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("", LoginView.as_view(template_name='authentication/login.html',
                                redirect_authenticated_user=True), name="login"),
-    path("logout", LogoutView.as_view(), name="logout"),
     path("home", litRevu.views.home, name="home"),
-    path("signup", litRevu.views.SignupPage.as_view(), name="signup"),
+    path("auth/", include(("authentication.urls", "auth"))),
+    path("litRevu/", include(("litRevu.urls", "litrevu"))),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
