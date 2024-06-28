@@ -6,8 +6,27 @@
     <article>
         <h1>Suivre d'autres utilisateurs</h1>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+        rel="stylesheet" type="text/css" />
+
         <form action="" class="search_bar" hx-post="{% url 'litrevu:subscribe_to' %}"  hx-target='#sub-table'>
-            <input type="search" id="followed_user" name="followed_user" />
+            <input type="search" id="followed_user" name="followed_user"/>
+            <script>
+              $( function() {
+                var availableUsers = [
+                    {% for user in users %}
+                        "{{user.username}}",
+                    {% endfor %}
+                ];
+                $( "#followed_user" ).autocomplete({
+                  source: availableUsers
+                });
+              } );
+            </script>
             <button type="submit" >Envoyer</button>
         </form>
     </article>

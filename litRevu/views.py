@@ -18,29 +18,30 @@ def home(request):
 class SubCreationView(CreateView):
     template_name = "litRevu/subscribe.html"
     form_class = SubscribeCreationForm
-    success_url = reverse_lazy("sub_page")
 
     def get(self, request, *args, **kwargs):
         subs = UserFollows.objects.filter(user=self.request.user)
         followers = UserFollows.objects.filter(followed_user=self.request.user)
+        users_list = User.objects.all()
+        context = {"users": users_list, "subs": subs, "followers": followers, "error_message": ""}
 
-        return render(request, self.template_name, {"subs": subs, "followers": followers})
+        return render(request, self.template_name, context)
 
 
 def sub_to(request):
     follow = request.POST.get("followed_user")
-    user_to_follow = User.objects.get(username=follow)
-
-    if user_to_follow:
+    try:
+        user_to_follow = User.objects.get(username=follow)
         sub_to_user = UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
         sub_to_user.save()
         subs = UserFollows.objects.filter(user=request.user)
 
         return render(request, 'litRevu/subscriptions_table.html', {'subs': subs})
-
-    # else:
-    #     message = "Cet utilisateur n'existe pas"
-    #     return render(request, 'litRevu/subscriptions_table.html', {"message": message})
+    except User.DoesNotExist:
+        print("erreur blabla")
+        error_message = f"L'utilisateur {follow} n'existe pas."
+        subs = UserFollows.objects.filter(user=request.user)
+        return render(request, 'litRevu/subscriptions_table.html', {"subs": subs, "error_message": error_message})
 
 
 def unsub_to(request, unfollow_user):
