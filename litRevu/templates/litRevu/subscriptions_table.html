@@ -1,0 +1,13 @@
+{% if subs %}
+    {% for sub in subs %}
+        <li class="sub">
+            <form action="" hx-delete="{% url 'litrevu:unsubscribe_to' sub.followed_user %}"  hx-target='#sub-table'>
+                <p class="subscribe_user">{{ sub.followed_user }}</p>
+                <button class="unsubscribe_user">Se désabonner</button>
+            </form>
+        </li>
+    {% endfor %}
+{% else %}
+    <li>Aucun abonnement</li>
+{% endif %}
+

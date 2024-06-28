@@ -1,0 +1,47 @@
+{% extends 'litRevu/layout.html' %}
+{% block content %}
+
+<section id="subscribe_page">
+
+    <article>
+        <h1>Suivre d'autres utilisateurs</h1>
+
+        <form action="" class="search_bar" hx-post="{% url 'litrevu:subscribe_to' %}"  hx-target='#sub-table'>
+            <input type="search" id="followed_user" name="followed_user" />
+            <button type="submit" >Envoyer</button>
+        </form>
+    </article>
+
+    <article>
+        <h1>Abonnements</h1>
+        <ul id='sub-table'>
+            {% include 'litRevu/subscriptions_table.html' %}
+        </ul>
+    </article>
+
+    <article>
+        <h1>Abonnés</h1>
+        <ul>
+            {% if followers %}
+                {% for follower in followers %}
+                <li class="follower_li">{{ follower.user }}</li>
+                {% endfor %}
+            {% else %}
+                <li>Aucun abonné</li>
+            {% endif %}
+
+        </ul>
+    </article>
+
+</section>
+
+ <script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+    </script>
+
+   {% load static %}
+    <script src="{% static 'HTMX/htmx.min.js' %}" defer></script>
+
+{% endblock content %}

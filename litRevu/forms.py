@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse_lazy
 
-from litRevu.models import Ticket, Review
+from litRevu.models import Ticket, Review, UserFollows
 
 
 class TicketCreationForm(forms.ModelForm):
@@ -20,4 +20,7 @@ class ReviewCreationForm(forms.ModelForm):
         fields = ("headline", "note", "headline", "body")
 
 
-# utiliser Form et non pas ModelForm si j'en viens à faire un gros formulaire combinant les deux
+class SubscribeCreationForm(forms.ModelForm):
+    class Meta:
+        model = UserFollows
+        fields = ("followed_user",)
