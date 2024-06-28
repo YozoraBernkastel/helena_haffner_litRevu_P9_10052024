@@ -10,7 +10,15 @@ urlpatterns = [
     path("ticket&reviewCreation", litRevu.views.TicketReviewCreationView.as_view(), name="ticket_review_creation"),
     path("reviewCreation/<int:id>", litRevu.views.ReviewCreationView.as_view(), name="review_creation"),
     path("subPage", litRevu.views.SubCreationView.as_view(), name="sub_page"),
+
 ]
 
+htmx_urlpatterns = [
+    path('subscribe_to/', litRevu.views.sub_to, name='subscribe_to'),
+
+]
+
+urlpatterns += htmx_urlpatterns
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 

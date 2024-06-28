@@ -1,0 +1,31 @@
+<article>
+        <h1>Abonnements</h1>
+        <ul>
+            {% if subs %}
+                {% for sub in subs %}
+                <li class="sub">
+    <!--                 un formulaire à la place avec rechargement de page ?  J'aimerais bien ne pas avoir à recharger la page -->
+                    <p class="subscribe_user">{{ sub.followed_user }}</p>
+                    <button class="unsubscribe_user">Se désabonner</button>
+                </li>
+                {% endfor %}
+            {% else %}
+                <li>Aucun abonnement</li>
+            {% endif %}
+
+        </ul>
+    </article>
+
+    <article>
+        <h1>Abonnés</h1>
+        <ul>
+            {% if followers %}
+                {% for follower in followers %}
+                <li class="follower_li">{{ follower.user }}</li>
+                {% endfor %}
+            {% else %}
+                <li>Aucun abonné</li>
+            {% endif %}
+
+        </ul>
+    </article>

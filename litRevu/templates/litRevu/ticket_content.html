@@ -13,5 +13,7 @@
     <p class="book_title">{{ ticket.title }}</p>
     <p class="description">{{ ticket.description }}</p>
     <!--    todo vérifier si le champs est rempli avant d'afficher + afficher l'image plutôt que le lien vers elle!!-->
-    <img src="{{ ticket.image }}" alt="">
+    {% if ticket.image %}
+    <img src="{{ ticket.image.url }}" alt="">
+    {% endif %}
 </div>

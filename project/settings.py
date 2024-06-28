@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'authentication',
     'litRevu.apps.LitrevuConfig',
+    'django_htmx',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -113,6 +115,7 @@ AUTH_USER_MODEL = "authentication.User"
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/public/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Media files
 MEDIA_URL = '/public/media/'

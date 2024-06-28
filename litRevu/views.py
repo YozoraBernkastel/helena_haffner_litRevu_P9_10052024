@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.shortcuts import render, redirect, get_object_or_404
+from authentication.models import User
 from litRevu.forms import TicketCreationForm, ReviewCreationForm, SubscribeCreationForm
 from django.utils.decorators import method_decorator
 from litRevu.models import Ticket, UserFollows
@@ -17,15 +18,28 @@ def home(request):
 class SubCreationView(CreateView):
     template_name = "litRevu/subscribe.html"
     form_class = SubscribeCreationForm
+    success_url = reverse_lazy("sub_page")
 
-    # todo BOF
     def get(self, request, *args, **kwargs):
-        form_class = SubscribeCreationForm()
         subs = UserFollows.objects.filter(user=self.request.user)
         followers = UserFollows.objects.filter(followed_user=self.request.user)
-        success_url = reverse_lazy("sub_page")
 
         return render(request, self.template_name, {"subs": subs, "followers": followers})
+
+
+def sub_to(request):
+    follow = request.POST.get("followed_user")
+    print(follow)
+    user_to_follow = User.objects.get(username=follow)
+
+    sub_to_user = UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
+
+    sub_to_user.save()
+
+    subs = UserFollows.objects.filter(user=request.user)
+    followers = UserFollows.objects.filter(followed_user=request.user)
+
+    return render(request, 'litRevu/subscriptions_table.html', {'subs': subs, "followers": followers})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -82,21 +96,20 @@ class TicketReviewCreationView(View):
         return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})
 
     def post(self, request):
-        if request.method == "POST":
-            ticket_form = TicketCreationForm(request.POST)
-            review_form = ReviewCreationForm(request.POST)
+        ticket_form = TicketCreationForm(request.POST)
+        review_form = ReviewCreationForm(request.POST)
 
-            ticket_form.instance.user = self.request.user
+        ticket_form.instance.user = self.request.user
 
-            if ticket_form.is_valid():
-                ticket = ticket_form.save()
+        if ticket_form.is_valid():
+            ticket = ticket_form.save()
 
-                if review_form.is_valid():
-                    review_form.instance.ticket_id = ticket.id
-                    review_form.instance.rating = review_form.cleaned_data["note"]
-                    review_form.instance.user = self.request.user
-                    review_form.save()
+            if review_form.is_valid():
+                review_form.instance.ticket_id = ticket.id
+                review_form.instance.rating = review_form.cleaned_data["note"]
+                review_form.instance.user = self.request.user
+                review_form.save()
 
-                    return redirect("home")
+                return redirect("home")
 
-            return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})
+        return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})

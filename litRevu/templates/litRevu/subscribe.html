@@ -5,33 +5,25 @@
     <article>
         <h1>Suivre d'autres utilisateurs</h1>
 
-        <form action="" class="search_bar">
-            <p>barre de recherche à créer</p>
+        <form action="" class="search_bar" hx-post="{% url 'litrevu:subscribe_to' %}"  hx-target='#sub-table'>
+            <input type="search" id="followed_user" name="followed_user" />
             <button type="submit" >Envoyer</button>
         </form>
     </article>
 
-    <article>
-        <h1>Abonnements</h1>
-        <ul>
-            {% for sub in subs %}
-            <li class="sub">
-<!--                 un formulaire à la place avec rechargement de page ?  J'aimerais bien ne pas avoir à recharger la page -->
-                <p class="subscribe_user">{{ sub.user }}</p>
-                <div class="unsubscribe_user">Désabonner</div>
-            </li>
-            {% endfor %}
-        </ul>
-    </article>
+    <div id='sub-table'>
+        {% include 'litRevu/subscriptions_table.html' %}
+    </div>
 
-    <article>
-        <h1>Abonnés</h1>
-        <ul>
-            {% for follower in followers %}
-            <li class="follower_li">{{ follower.user }}</li>
-            {% endfor %}
-        </ul>
-    </article>
 </section>
+
+ <script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+    </script>
+
+   {% load static %}
+    <script src="{% static 'HTMX/htmx.min.js' %}" defer></script>
 
 {% endblock content %}
