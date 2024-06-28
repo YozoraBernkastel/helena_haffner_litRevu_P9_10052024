@@ -29,17 +29,28 @@ class SubCreationView(CreateView):
 
 def sub_to(request):
     follow = request.POST.get("followed_user")
-    print(follow)
     user_to_follow = User.objects.get(username=follow)
 
-    sub_to_user = UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
+    if user_to_follow:
+        sub_to_user = UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
+        sub_to_user.save()
+        subs = UserFollows.objects.filter(user=request.user)
 
-    sub_to_user.save()
+        return render(request, 'litRevu/subscriptions_table.html', {'subs': subs})
 
-    subs = UserFollows.objects.filter(user=request.user)
-    followers = UserFollows.objects.filter(followed_user=request.user)
+    # else:
+    #     message = "Cet utilisateur n'existe pas"
+    #     return render(request, 'litRevu/subscriptions_table.html', {"message": message})
 
-    return render(request, 'litRevu/subscriptions_table.html', {'subs': subs, "followers": followers})
+
+def unsub_to(request, unfollow_user):
+    user_to_unfollow = User.objects.get(username=unfollow_user)
+    follow_obj = UserFollows.objects.get(user=request.user, followed_user=user_to_unfollow)
+
+    if follow_obj:
+        follow_obj.delete()
+        subs = UserFollows.objects.filter(user=request.user)
+        return render(request, 'litRevu/subscriptions_table.html', {'subs': subs})
 
 
 @method_decorator(login_required, name='dispatch')

@@ -15,6 +15,7 @@ urlpatterns = [
 
 htmx_urlpatterns = [
     path('subscribe_to/', litRevu.views.sub_to, name='subscribe_to'),
+    path('unsubscribe_to/<str:unfollow_user>', litRevu.views.unsub_to, name='unsubscribe_to'),
 
 ]
 

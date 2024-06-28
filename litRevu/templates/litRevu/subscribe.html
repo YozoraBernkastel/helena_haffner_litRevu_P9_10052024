@@ -2,6 +2,7 @@
 {% block content %}
 
 <section id="subscribe_page">
+
     <article>
         <h1>Suivre d'autres utilisateurs</h1>
 
@@ -11,9 +12,26 @@
         </form>
     </article>
 
-    <div id='sub-table'>
-        {% include 'litRevu/subscriptions_table.html' %}
-    </div>
+    <article>
+        <h1>Abonnements</h1>
+        <ul id='sub-table'>
+            {% include 'litRevu/subscriptions_table.html' %}
+        </ul>
+    </article>
+
+    <article>
+        <h1>Abonnés</h1>
+        <ul>
+            {% if followers %}
+                {% for follower in followers %}
+                <li class="follower_li">{{ follower.user }}</li>
+                {% endfor %}
+            {% else %}
+                <li>Aucun abonné</li>
+            {% endif %}
+
+        </ul>
+    </article>
 
 </section>
 
