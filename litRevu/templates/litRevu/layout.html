@@ -9,7 +9,7 @@
     {% if user.is_authenticated %}
             <ul>
                 <li><a href="{% url 'flux' %}">Mon Flux</a></li>
-                <li><a href="">Mes Posts</a></li>
+                <li><a href="{% url 'litrevu:user_posts' %}">Mes Posts</a></li>
                 <li><a href="{% url 'litrevu:sub_page' %}">Gérer mes Abonnements</a></li>
                 {% if user.is_superuser %}
                 <li>

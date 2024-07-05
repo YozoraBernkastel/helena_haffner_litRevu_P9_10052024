@@ -5,7 +5,7 @@
     <a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Écrire une nouvelle critique</a>
 </div>
 <div>
-    {% for ticket in tickets %}
+    {% for content in tickets %}
          <article>
              {% include 'litRevu/_ticket_content.html' %}
          </article>

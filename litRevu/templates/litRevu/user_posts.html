@@ -1,0 +1,26 @@
+{% extends 'litRevu/layout.html' %}
+    {% block content %}
+        <div>
+
+            <h1>Vos Posts</h1>
+
+            {% if content_exists %}
+                {% for content in posts %}
+
+                        <article>
+                             {% include 'litRevu/_ticket_content.html' %}
+                        </article>
+
+
+
+
+                {% endfor %}
+                {% else %}
+                    <article>
+                        Vous n'avez encore rien posté.
+                    </article>
+            {% endif %}
+
+        </div>
+
+    {% endblock content %}

@@ -5,11 +5,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from authentication.models import User
 from litRevu.forms import TicketCreationForm, ReviewCreationForm, SubscribeCreationForm
 from django.utils.decorators import method_decorator
-from litRevu.models import Ticket, UserFollows
+from litRevu.models import Ticket, Review, UserFollows
 
 
 @login_required()
 def flux(request):
+    # todo il faudra faire en sorte de ne récupérer que les tickets des personnes suivies (et de l'utilisateur ?)
     tickets = Ticket.objects.all()
     return render(request, "litRevu/flux.html", {"tickets": tickets, "flux": True})
 
@@ -30,7 +31,7 @@ class SubCreationView(CreateView):
 
 @login_required()
 def sub_to(request):
-    template: str = 'litRevu/subscriptions_table.html'
+    template: str = 'litRevu/_subscriptions_table.html'
     follow = request.POST.get("followed_user")
     try:
         user_to_follow = User.objects.get(username=follow)
@@ -63,7 +64,7 @@ def unsub_to(request, unfollow_user):
     if follow_obj:
         follow_obj.delete()
         subs = UserFollows.objects.filter(user=request.user)
-        return render(request, 'litRevu/subscriptions_table.html', {'subs': subs})
+        return render(request, 'litRevu/_subscriptions_table.html', {'subs': subs})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -95,7 +96,7 @@ class ReviewCreationView(CreateView):
         return self._ticket
 
     def get_context_data(self, **kwargs):
-        kwargs["ticket"] = self.ticket
+        kwargs["content"] = self.ticket
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -137,3 +138,20 @@ class TicketReviewCreationView(View):
                 return redirect("flux")
 
         return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})
+
+
+@method_decorator(login_required, name='dispatch')
+class UserPostsView(View):
+    template = "litRevu/user_posts.html"
+
+    def get(self, request):
+        user_tickets = Ticket.objects.filter(user=request.user)
+        user_reviews = Review.objects.filter(user=request.user)
+        # todo assembler et trier les tickets et reviews ici ? Sinon envoyer les deux et créer un onglet pour
+        #  chaque afin que ce soit plus pratique pour l'utilisateur.
+        #  Dans ce cas on pourrait passer d'un onglet à l'autre sans refresh grâce à HTMX, non ?
+        #  Si j'opte pour cette solution, il faudra penser à renommer "content" dans le html "ticket" (voir ticket_content.html, flux et user_posts.html)
+        user_posts = user_tickets
+        content_exists = len(user_posts) > 0
+
+        return render(request, self.template, context={"content_exists": content_exists, "posts": user_posts})

@@ -10,6 +10,7 @@ urlpatterns = [
     path("ticket&reviewCreation", litRevu.views.TicketReviewCreationView.as_view(), name="ticket_review_creation"),
     path("reviewCreation/<int:id>", litRevu.views.ReviewCreationView.as_view(), name="review_creation"),
     path("subPage", litRevu.views.SubCreationView.as_view(), name="sub_page"),
+    path("userPosts", litRevu.views.UserPostsView.as_view(), name="user_posts"),
 
 ]
 
