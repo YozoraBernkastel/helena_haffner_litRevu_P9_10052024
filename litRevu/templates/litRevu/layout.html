@@ -5,15 +5,15 @@
     <title>LITReview</title>
 </head>
 <body>
-    <header><h1><a href="{% url 'home' %}">LITReview</a></h1></header>
+    <header><h1><a href="{% url 'flux' %}">LITReview</a></h1></header>
     {% if user.is_authenticated %}
             <ul>
-                <li>Flux</li>
-                <li>Posts</li>
-                <li><a href="{% url 'litrevu:sub_page' %}">Abonnements</a></li>
+                <li><a href="{% url 'flux' %}">Mon Flux</a></li>
+                <li><a href="">Mes Posts</a></li>
+                <li><a href="{% url 'litrevu:sub_page' %}">Gérer mes Abonnements</a></li>
                 {% if user.is_superuser %}
                 <li>
-                    <a href="">Admin</a>
+                    <a href="{% url 'admin:index' %}">Admin</a>
                 </li>
                 {% endif %}
                 <li>
@@ -23,6 +23,14 @@
             </form>
                 </li>
             </ul>
+
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
     {% endif %}
     {% block content %}{% endblock content %}

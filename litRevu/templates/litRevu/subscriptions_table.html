@@ -1,3 +1,7 @@
+{% if error_message %}
+<p class="sub_error"> {{ error_message }}</p>
+{% endif %}
+
 {% if subs %}
     {% for sub in subs %}
         <li class="sub">

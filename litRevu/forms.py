@@ -7,8 +7,8 @@ from litRevu.models import Ticket, Review, UserFollows
 class TicketCreationForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ("title", "description", "image")
-        success_url = reverse_lazy('home')
+        fields = ("id", "title", "author", "description", "image")
+        success_url = reverse_lazy('flux')
 
 
 class ReviewCreationForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class ReviewCreationForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        fields = ("headline", "note", "headline", "body")
+        fields = ("headline", "note", "body")
 
 
 class SubscribeCreationForm(forms.ModelForm):
