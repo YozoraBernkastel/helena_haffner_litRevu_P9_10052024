@@ -134,7 +134,7 @@ USE_TZ = True
 
 LOGIN_URL = 'login'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'flux'
 
 LOGOUT_REDIRECT_URL = 'login'
 

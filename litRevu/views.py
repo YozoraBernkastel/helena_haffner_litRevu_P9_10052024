@@ -9,9 +9,9 @@ from litRevu.models import Ticket, UserFollows
 
 
 @login_required()
-def home(request):
+def flux(request):
     tickets = Ticket.objects.all()
-    return render(request, "litRevu/home.html", {"tickets": tickets})
+    return render(request, "litRevu/flux.html", {"tickets": tickets, "flux": True})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -28,22 +28,34 @@ class SubCreationView(CreateView):
         return render(request, self.template_name, context)
 
 
+@login_required()
 def sub_to(request):
+    template: str = 'litRevu/subscriptions_table.html'
     follow = request.POST.get("followed_user")
     try:
         user_to_follow = User.objects.get(username=follow)
-        sub_to_user = UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
-        sub_to_user.save()
-        subs = UserFollows.objects.filter(user=request.user)
+        same_user = user_to_follow == request.user
+        already_sub = len(UserFollows.objects.filter(user=request.user, followed_user=user_to_follow)) > 0
 
-        return render(request, 'litRevu/subscriptions_table.html', {'subs': subs})
+        if same_user:
+            error_message = f"Vous ne pouvez pas vous suivre vous-même."
+        elif already_sub:
+            error_message = f"Vous suivez déjà {follow}."
+        else:
+            sub_to_user = UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
+            sub_to_user.save()
+            error_message = False
+
+        subs = UserFollows.objects.filter(user=request.user)
+        return render(request, template, {"subs": subs, "error_message": error_message})
+
     except User.DoesNotExist:
-        print("erreur blabla")
         error_message = f"L'utilisateur {follow} n'existe pas."
         subs = UserFollows.objects.filter(user=request.user)
-        return render(request, 'litRevu/subscriptions_table.html', {"subs": subs, "error_message": error_message})
+        return render(request, template, {"subs": subs, "error_message": error_message})
 
 
+@login_required()
 def unsub_to(request, unfollow_user):
     user_to_unfollow = User.objects.get(username=unfollow_user)
     follow_obj = UserFollows.objects.get(user=request.user, followed_user=user_to_unfollow)
@@ -56,9 +68,9 @@ def unsub_to(request, unfollow_user):
 
 @method_decorator(login_required, name='dispatch')
 class TicketCreationView(CreateView):
-    template_name = "litRevu/creation/ticket.html"
+    template_name = "litRevu/creation/_ticket.html"
     form_class = TicketCreationForm
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("flux")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -69,7 +81,7 @@ class TicketCreationView(CreateView):
 class ReviewCreationView(CreateView):
     template_name = "litRevu/creation/review.html"
     form_class = ReviewCreationForm
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("flux")
     _ticket = None
 
     @property
@@ -99,7 +111,7 @@ class TicketReviewCreationView(View):
     template_name = "litRevu/creation/ticket&review.html"
     ticket_form = TicketCreationForm
     review_form = ReviewCreationForm
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("flux")
 
     def get(self, request):
         ticket_form = TicketCreationForm()
@@ -122,6 +134,6 @@ class TicketReviewCreationView(View):
                 review_form.instance.user = self.request.user
                 review_form.save()
 
-                return redirect("home")
+                return redirect("flux")
 
         return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})

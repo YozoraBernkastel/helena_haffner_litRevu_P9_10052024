@@ -5,7 +5,7 @@
 
     <article>
         <p>Vous êtes en train de poster en réponse à</p>
-        {% include 'litRevu/ticket_content.html' %}
+        {% include 'litRevu/_ticket_content.html' %}
 
     </article>
 
@@ -15,7 +15,6 @@
              <h1>Critique</h1>
             {% csrf_token %}
             {{ form }}
-            <a href="{% url 'litrevu:review_creation' ticket.id %}" class="review_creation_button">Créer une critique</a>
         </article>
 
         <button type="submit" >Envoyer</button>

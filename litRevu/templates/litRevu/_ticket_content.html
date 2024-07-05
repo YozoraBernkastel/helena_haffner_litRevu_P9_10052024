@@ -1,6 +1,5 @@
 
 <div>
-
     <div>
         {% if request.user == ticket.user %}
             <p>Vous avez demandé une critique</p>
@@ -10,10 +9,13 @@
 
         <p class="date">{{ ticket.time_created }}</p>
     </div>
-    <p class="book_title">{{ ticket.title }}</p>
-    <p class="description">{{ ticket.description }}</p>
+    <p class="book_title"><b>{{ ticket.title }}</b> de {{ ticket.author }}</p>
+    <p class="book_description">{{ ticket.description }}</p>
     <!--    todo vérifier si le champs est rempli avant d'afficher + afficher l'image plutôt que le lien vers elle!!-->
     {% if ticket.image %}
-    <img src="{{ ticket.image.url }}" alt="">
+    <img src="{{ ticket.image.url }}" alt="couverture du livre {{ ticket.title }}">
+    {% endif %}
+    {% if flux %}
+        <a href="{% url 'litrevu:review_creation' ticket.id %}">En écrire la critique</a>
     {% endif %}
 </div>
