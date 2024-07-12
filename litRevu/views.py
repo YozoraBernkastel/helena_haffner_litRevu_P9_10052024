@@ -1,7 +1,7 @@
 from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View
+from django.views.generic import CreateView, View, UpdateView
 from django.db.models import CharField, Value
 from django.shortcuts import render, redirect, get_object_or_404
 from authentication.models import User
@@ -158,26 +158,46 @@ class UserPostsView(View):
 
         return render(request, self.template, context)
 
-
 @method_decorator(login_required, name='dispatch')
-class TicketModification(CreateView):
-    template_name = "litRevu/ticket_modification.html"
+class TicketModification(UpdateView):
+    model = Ticket
     form_class = TicketCreationForm
-    success_url = reverse_lazy("flux")
+    template_name = "litRevu/ticket_modification.html"
+    success_url = "/flux"
 
-    def get_form(self, **kwargs):
-        ticket = Ticket.objects.get(id=self.kwargs["id"])
-        form_class = TicketCreationForm(instance=ticket)
+# @method_decorator(login_required, name='dispatch')
+# class TicketModification(CreateView):
+#     # todo, à priori utiliser UpdateView permettrait d'avoir un code plus optimal pour modifier l'objet#
+#     template_name = "litRevu/ticket_modification.html"
+#     form_class = TicketCreationForm
+#     success_url = reverse_lazy("flux")
+#
+#     def get_form(self, **kwargs):
+#         ticket = get_object_or_404(Ticket, id=self.kwargs["id"])
+#         form_class = TicketCreationForm(instance=ticket)
+#
+#         return form_class
+#
+#     def post(self, request, **kwargs):
+#         ticket = Ticket.objects.get(id=kwargs["id"])
+#         form = TicketCreationForm(request.POST, instance=ticket)
+#
+#         if form.is_valid():
+#             form.save()
+#             return redirect("flux")
+#
+#         return render(request, self.template_name)
 
-        return form_class
 
-    def post(self, request, **kwargs):
-        print(type(kwargs["id"]))
-        ticket = Ticket.objects.get(id=kwargs["id"])
-        form = TicketCreationForm(request.POST, instance=ticket)
 
-        if form.is_valid():
-            form.save()
-            return redirect("flux")
+
+# todo il faudra sans doute utiliser DeleteView pour supprimer un objet
+#     #  https://docs.djangoproject.com/fr/2.2/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView
+
+# @method_decorator(login_required, name='dispatch')
+# class TicketModification(CreateView):
+#     template_name = "litRevu/review_modification.html"
+#     form_class = ReviewCreationForm
+#     success_url = reverse_lazy("flux")
 
 
