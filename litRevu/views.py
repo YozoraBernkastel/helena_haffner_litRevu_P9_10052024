@@ -174,7 +174,7 @@ class TicketModification(CreateView):
     def post(self, request, **kwargs):
         print(type(kwargs["id"]))
         ticket = Ticket.objects.get(id=kwargs["id"])
-        form = TicketCreationForm(instance=ticket)
+        form = TicketCreationForm(request.POST, instance=ticket)
 
         if form.is_valid():
             form.save()
