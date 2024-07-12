@@ -1,21 +1,36 @@
 
-<div>
     <div>
-        {% if request.user == content.user %}
-            <p>Vous avez demandé une critique</p>
+        {% if request.user == ticket.user %}
+            {% if show_button %}
+                <p>Votre Ticket</p>
+            {% else %}
+                <p>Vous avez demandé une critique</p>
+            {% endif %}
         {% else %}
-            <p class="type of post">{{ content.user }} a demandé une critique</p>
+            {% if show_button %}
+                <p>Ticket de {{ ticket.user }}</p>
+            {% else %}
+                <p class="type of post">{{ ticket.user }} a demandé une critique</p>
+            {% endif %}
+
          {% endif %}
 
-        <p class="date">{{ content.time_created }}</p>
+        <p class="date">{{ ticket.time_created }}</p>
     </div>
-    <p class="book_title"><b>{{ content.title }}</b> de {{ content.author }}</p>
-    <p class="book_description">{{ content.description }}</p>
-    <!--    todo vérifier si le champs est rempli avant d'afficher + afficher l'image plutôt que le lien vers elle!!-->
-    {% if content.image %}
-    <img src="{{ content.image.url }}" alt="couverture du livre {{ content.title }}">
+    <p class="book_title"><b>{{ ticket.title }}</b> de {{ ticket.author }}</p>
+    <p class="book_description">{{ ticket.description }}</p>
+    {% if ticket.image %}
+    <img src="{{ ticket.image.url }}" alt="couverture du livre {{ ticket.title }}">
     {% endif %}
     {% if flux %}
-        <a href="{% url 'litrevu:review_creation' content.id %}">En écrire la critique</a>
+        <a href="{% url 'litrevu:review_creation' ticket.id %}">En écrire la critique</a>
     {% endif %}
-</div>
+
+    {% if request.user == ticket.user and show_button and not review  %}
+       <div>
+             <a href="{% url 'litrevu:ticket_modification' ticket.id %}">Modifier</a>
+             <a href="">Supprimer</a>
+       </div>
+
+    {% endif %}
+

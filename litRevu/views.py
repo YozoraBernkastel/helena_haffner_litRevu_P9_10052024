@@ -1,6 +1,8 @@
+from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
+from django.db.models import CharField, Value
 from django.shortcuts import render, redirect, get_object_or_404
 from authentication.models import User
 from litRevu.forms import TicketCreationForm, ReviewCreationForm, SubscribeCreationForm
@@ -146,12 +148,36 @@ class UserPostsView(View):
 
     def get(self, request):
         user_tickets = Ticket.objects.filter(user=request.user)
+        user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
         user_reviews = Review.objects.filter(user=request.user)
-        # todo assembler et trier les tickets et reviews ici ? Sinon envoyer les deux et créer un onglet pour
-        #  chaque afin que ce soit plus pratique pour l'utilisateur.
-        #  Dans ce cas on pourrait passer d'un onglet à l'autre sans refresh grâce à HTMX, non ?
-        #  Si j'opte pour cette solution, il faudra penser à renommer "content" dans le html "ticket" (voir ticket_content.html, flux et user_posts.html)
-        user_posts = user_tickets
+        user_reviews = user_reviews.annotate(content_type=Value('Reviews', CharField()))
+        user_posts = sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
         content_exists = len(user_posts) > 0
+        context = {"content_exists": content_exists, "posts": user_posts,
+                   "show_button": True}
 
-        return render(request, self.template, context={"content_exists": content_exists, "posts": user_posts})
+        return render(request, self.template, context)
+
+
+@method_decorator(login_required, name='dispatch')
+class TicketModification(CreateView):
+    template_name = "litRevu/ticket_modification.html"
+    form_class = TicketCreationForm
+    success_url = reverse_lazy("flux")
+
+    def get_form(self, **kwargs):
+        ticket = Ticket.objects.get(id=self.kwargs["id"])
+        form_class = TicketCreationForm(instance=ticket)
+
+        return form_class
+
+    def post(self, request, **kwargs):
+        print(type(kwargs["id"]))
+        ticket = Ticket.objects.get(id=kwargs["id"])
+        form = TicketCreationForm(instance=ticket)
+
+        if form.is_valid():
+            form.save()
+            return redirect("flux")
+
+

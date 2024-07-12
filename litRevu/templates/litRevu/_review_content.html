@@ -1,0 +1,26 @@
+<div>
+    <div>
+        {% if request.user == review.user %}
+            <p>Vous avez publié une critique</p>
+        {% else %}
+            <p class="type of post">{{ review.user }} a demandé une critique</p>
+         {% endif %}
+
+        <p class="date">{{ review.time_created }}</p>
+    </div>
+        <p class="review_headline"><b>{{ review.headline }}</b> - {{ review.rating }}</p>
+    <div>
+        {% include 'litRevu/_ticket_content.html' with ticket=review.ticket %}
+    </div>
+    {% if flux %}
+        <a href="{% url 'litrevu:review_creation' review.id %}">En écrire la critique</a>
+    {% endif %}
+     {% if show_button %}
+       <div>
+             <a href="">Modifier</a>
+             <a href="">Supprimer</a>
+       </div>
+    {% endif %}
+
+
+</div>

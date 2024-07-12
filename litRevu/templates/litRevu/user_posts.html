@@ -5,18 +5,23 @@
             <h1>Vos Posts</h1>
 
             {% if content_exists %}
-                {% for content in posts %}
-<!--                if content == Ticket-->
+                {% for post in posts %}
+                    {% if post.content_type == "Ticket" %}
 
-                        <article>
-                             {% include 'litRevu/_ticket_content.html' %}
-                        </article>
-<!--                   if content == Review -->
-<!--                        <article>-->
-<!--                            todo {% include 'litRevu/_ticket_content.html' %}-->
-<!--                           todo + du html directement ici pour afficher les infos de la review se trouvant également dans content !!!-->
-<!--                        </article>-->
-
+                            <article>
+                                 {% include 'litRevu/_ticket_content.html' with ticket=post %}
+                            </article>
+                    {% elif post.content_type == "Reviews" %}
+                            <article>
+                               <div>
+                                   {% include 'litRevu/_review_content.html' with review=post %}
+                                </div>
+                            </article>
+                     {% endif %}
+                <div>
+                     <a href=""></a>
+                     <a href=""></a>
+                </div>
 
 
 
