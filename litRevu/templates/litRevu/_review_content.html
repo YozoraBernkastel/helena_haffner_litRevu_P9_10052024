@@ -17,8 +17,7 @@
     {% endif %}
      {% if show_button %}
        <div>
-<!--           penser à remettre le { % -->
-             <a href=" url 'litrevu:ticket_modification' ticket.id ">Modifier</a>
+             <a href="{% url 'litrevu:review_modification' review.id %}">Modifier</a>
              <a href="">Supprimer</a>
        </div>
     {% endif %}

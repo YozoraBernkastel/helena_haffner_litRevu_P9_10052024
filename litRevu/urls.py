@@ -11,7 +11,8 @@ urlpatterns = [
     path("reviewCreation/<int:id>", litRevu.views.ReviewCreationView.as_view(), name="review_creation"),
     path("subPage", litRevu.views.SubCreationView.as_view(), name="sub_page"),
     path("userPosts", litRevu.views.UserPostsView.as_view(), name="user_posts"),
-    path("<slug:pk>/ticketModification", litRevu.views.TicketModification.as_view(), name="ticket_modification")
+    path("ticketModification/<slug:pk>/", litRevu.views.TicketModification.as_view(), name="ticket_modification"),
+    path("reviewModification/<slug:pk>/", litRevu.views.ReviewModification.as_view(), name="review_modification"),
 
 ]
 

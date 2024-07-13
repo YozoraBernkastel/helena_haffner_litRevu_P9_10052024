@@ -158,46 +158,32 @@ class UserPostsView(View):
 
         return render(request, self.template, context)
 
+
 @method_decorator(login_required, name='dispatch')
 class TicketModification(UpdateView):
     model = Ticket
     form_class = TicketCreationForm
     template_name = "litRevu/ticket_modification.html"
-    success_url = "/flux"
-
-# @method_decorator(login_required, name='dispatch')
-# class TicketModification(CreateView):
-#     # todo, à priori utiliser UpdateView permettrait d'avoir un code plus optimal pour modifier l'objet#
-#     template_name = "litRevu/ticket_modification.html"
-#     form_class = TicketCreationForm
-#     success_url = reverse_lazy("flux")
-#
-#     def get_form(self, **kwargs):
-#         ticket = get_object_or_404(Ticket, id=self.kwargs["id"])
-#         form_class = TicketCreationForm(instance=ticket)
-#
-#         return form_class
-#
-#     def post(self, request, **kwargs):
-#         ticket = Ticket.objects.get(id=kwargs["id"])
-#         form = TicketCreationForm(request.POST, instance=ticket)
-#
-#         if form.is_valid():
-#             form.save()
-#             return redirect("flux")
-#
-#         return render(request, self.template_name)
+    success_url = "/litRevu/userPosts"
 
 
+@method_decorator(login_required, name='dispatch')
+class ReviewModification(UpdateView):
+    # todo le rating n'est pas automatiquement ajouté, il faut voir si on peut le faire pour éviter de renoter à chaque fois qu'on modifie la review
+    model = Review
+    form_class = ReviewCreationForm
+    template_name = "litRevu/review_modification.html"
+    success_url = "/litRevu/userPosts"
+
+    # todo il semblerait qu'il faille recoder post pour attribuer le champ note à rating !!!
 
 
 # todo il faudra sans doute utiliser DeleteView pour supprimer un objet
 #     #  https://docs.djangoproject.com/fr/2.2/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView
 
-# @method_decorator(login_required, name='dispatch')
-# class TicketModification(CreateView):
-#     template_name = "litRevu/review_modification.html"
-#     form_class = ReviewCreationForm
-#     success_url = reverse_lazy("flux")
+
+
+
+
 
 

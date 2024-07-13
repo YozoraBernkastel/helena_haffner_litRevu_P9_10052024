@@ -1,14 +1,15 @@
 {% extends 'litRevu/layout.html' %}
     {% block content %}
         <div>
-            <ul>
-                <li><a href="">Mes tickets</a></li>
-                <li><a href=""></a>Mes Critiques</li>
-            </ul>
-        </div>
-        <div>
 
             <h1>Vos Posts</h1>
+
+            <div>
+                <ul>
+                    <li><a href="">Mes tickets (page à faire)</a></li>
+                    <li><a href="">Mes Critiques (page à faire)</a></li>
+                </ul>
+            </div>
 
             {% if content_exists %}
                 {% for post in posts %}
@@ -28,9 +29,6 @@
                      <a href=""></a>
                      <a href=""></a>
                 </div>
-
-
-
                 {% endfor %}
                 {% else %}
                     <article>
