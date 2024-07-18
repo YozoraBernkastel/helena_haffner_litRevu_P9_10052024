@@ -1,6 +1,6 @@
     <div>
         {% if request.user == ticket.user %}
-            {% if show_button %}
+            {% if not show_button %}
                 <p>Votre Ticket</p>
             {% else %}
                 <p>Vous avez demandé une critique</p>

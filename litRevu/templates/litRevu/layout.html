@@ -32,6 +32,11 @@
 </ul>
 {% endif %}
 
+    <div>
+        <a href="{% url 'litrevu:ticket_creation' %}" class="reviewButton">Demander une critique</a>
+        <a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Écrire une nouvelle critique</a>
+    </div>
+
     {% endif %}
     {% block content %}{% endblock content %}
 

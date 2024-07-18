@@ -156,6 +156,24 @@ class UserPostsView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+class PersonalFlux(ListView):
+    paginate_by = 10
+    template_name = "litRevu/user_posts.html"
+
+    def get_queryset(self):
+        subs = UserFollows.objects.filter(user=self.request.user)
+        user_tickets = []
+        user_reviews = []
+        for followed in subs:
+            tickets = Ticket.objects.filter(user=followed.followed_user)
+            user_tickets += tickets.annotate(content_type=Value('Ticket', CharField()))
+            reviews = Review.objects.filter(user=followed.followed_user)
+            user_reviews.append(reviews.annotate(content_type=Value('Reviews', CharField())))
+
+        return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
+
+
+@method_decorator(login_required, name='dispatch')
 class UserTicketsView(ListView):
     paginate_by = 5
     template_name = "litRevu/user_posts.html"
