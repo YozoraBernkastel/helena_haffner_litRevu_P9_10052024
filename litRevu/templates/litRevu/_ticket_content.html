@@ -25,7 +25,7 @@
         <a href="{% url 'litrevu:review_creation' ticket.id %}">En écrire la critique</a>
     {% endif %}
 
-    {% if request.user == ticket.user and show_button and not review  %}
+    {% if request.user == ticket.user and not hide_button and not review  %}
        <div>
              <a href="{% url 'litrevu:ticket_modification' ticket.id %}" class="button">Modifier</a>
              <a href="{% url 'litrevu:delete_ticket' ticket.id %}" class="button">Supprimer</a>

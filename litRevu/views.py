@@ -143,29 +143,26 @@ class TicketReviewCreationView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class UserPostsView(View):
-    template = "litRevu/user_posts.html"
+class UserPostsView(ListView):
+    paginate_by = 5
+    template_name = "litRevu/user_posts.html"
 
-    def get(self, request):
-        user_tickets = Ticket.objects.filter(user=request.user)
+    def get_queryset(self):
+        user_tickets = Ticket.objects.filter(user=self.request.user)
         user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
-        user_reviews = Review.objects.filter(user=request.user)
+        user_reviews = Review.objects.filter(user=self.request.user)
         user_reviews = user_reviews.annotate(content_type=Value('Reviews', CharField()))
-        user_posts = sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
-        content_exists = len(user_posts) > 0
-        context = {"content_exists": content_exists, "posts": user_posts,
-                   "show_button": True}
-
-        return render(request, self.template, context)
+        return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
 
 
 @method_decorator(login_required, name='dispatch')
 class UserTicketsView(ListView):
     paginate_by = 5
-    model = Ticket
+    template_name = "litRevu/user_posts.html"
 
     def get_queryset(self):
-        return Ticket.objects.filter(user=self.request.user).order_by('-time_created')
+        user_tickets = Ticket.objects.filter(user=self.request.user).order_by('-time_created')
+        return user_tickets.annotate(content_type=Value('Ticket', CharField()))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -186,10 +183,11 @@ class DeleteTicket(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class UserReviewsView(ListView):
     paginate_by = 5
-    model = Review
+    template_name = "litRevu/user_posts.html"
 
     def get_queryset(self):
-        return Review.objects.filter(user=self.request.user).order_by('-time_created')
+        user_reviews = Review.objects.filter(user=self.request.user).order_by('-time_created')
+        return user_reviews.annotate(content_type=Value('Reviews', CharField()))
 
 
 @method_decorator(login_required, name='dispatch')

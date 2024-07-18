@@ -13,10 +13,12 @@
     <div>
         {% include 'litRevu/_ticket_content.html' with ticket=review.ticket %}
     </div>
+
     {% if flux %}
         <a href="{% url 'litrevu:review_creation' review.id %}">En écrire la critique</a>
     {% endif %}
-     {% if show_button %}
+
+     {% if request.user == review.user and not hide_button %}
        <div>
              <a href="{% url 'litrevu:review_modification' review.id %}" class="button">Modifier</a>
              <a href="{% url 'litrevu:delete_review' review.id %}" class="button">Supprimer</a>

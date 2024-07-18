@@ -6,8 +6,7 @@
 
              <h1>Vos Posts</h1>
 
-            {% if content_exists %}
-                {% for post in posts %}
+                {% for post in page_obj %}
                     {% if post.content_type == "Ticket" %}
 
                             <article>
@@ -25,12 +24,8 @@
                      <a href=""></a>
                 </div>
                 {% endfor %}
-                {% else %}
-                    <article>
-                        Vous n'avez encore rien posté.
-                    </article>
-            {% endif %}
 
+            {% include 'litRevu/_page_navigation.html' %}
         </div>
 
     {% endblock content %}
