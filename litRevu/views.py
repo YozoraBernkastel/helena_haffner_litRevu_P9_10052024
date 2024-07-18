@@ -1,7 +1,7 @@
 from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, UpdateView
+from django.views.generic import CreateView, View, UpdateView, DeleteView
 from django.db.models import CharField, Value
 from django.shortcuts import render, redirect, get_object_or_404
 from authentication.models import User
@@ -168,19 +168,33 @@ class TicketModification(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+class DeleteTicket(DeleteView):
+    model = Ticket
+    template_name = "litRevu/delete.html"
+    success_url = "/litRevu/userPosts"
+
+
+@method_decorator(login_required, name='dispatch')
 class ReviewModification(UpdateView):
-    # todo le rating n'est pas automatiquement ajouté, il faut voir si on peut le faire pour éviter de renoter à chaque fois qu'on modifie la review
+    # todo le rating n'est pas automatiquement ajouté, il faut voir si on peut le faire pour éviter de renoter à chaque fois qu'on modifie la review.
+    # todo Peut-être faut-il faire quelque chose dans forms.py plutôt qu'ici ?
     model = Review
     form_class = ReviewCreationForm
+    # form_class = form_class.CHOICES(initial={'note': Review.rating})
     template_name = "litRevu/review_modification.html"
     success_url = "/litRevu/userPosts"
 
-    # todo il semblerait qu'il faille recoder post pour attribuer le champ note à rating !!!
+    def form_valid(self, form):
+        form.instance.rating = form.cleaned_data["note"]
+        return super().form_valid(form)
 
 
-# todo il faudra sans doute utiliser DeleteView pour supprimer un objet
-#     #  https://docs.djangoproject.com/fr/2.2/ref/class-based-views/generic-editing/#django.views.generic.edit.UpdateView
-
+@method_decorator(login_required, name='dispatch')
+class DeleteReview(DeleteView):
+    # todo faut-il vérifier que l'utilisateur est bien l'auteur de la review avant de delete ?
+    model = Review
+    template_name = "litRevu/delete.html"
+    success_url = "/litRevu/userPosts"
 
 
 

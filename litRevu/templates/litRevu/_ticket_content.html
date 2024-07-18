@@ -1,4 +1,3 @@
-<p>blabla{{ ticket.user }} blabla</p>
     <div>
         {% if request.user == ticket.user %}
             {% if show_button %}
@@ -29,7 +28,7 @@
     {% if request.user == ticket.user and show_button and not review  %}
        <div>
              <a href="{% url 'litrevu:ticket_modification' ticket.id %}">Modifier</a>
-             <a href="">Supprimer</a>
+             <a href="{% url 'litrevu:delete_ticket' ticket.id %}">Supprimer</a>
        </div>
 
     {% endif %}

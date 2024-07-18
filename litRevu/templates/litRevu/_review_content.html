@@ -9,6 +9,7 @@
         <p class="date">{{ review.time_created }}</p>
     </div>
         <p class="review_headline"><b>{{ review.headline }}</b> - {{ review.rating }}</p>
+    <p class="review_body"> {{ review.body }}</p>
     <div>
         {% include 'litRevu/_ticket_content.html' with ticket=review.ticket %}
     </div>
@@ -18,7 +19,7 @@
      {% if show_button %}
        <div>
              <a href="{% url 'litrevu:review_modification' review.id %}">Modifier</a>
-             <a href="">Supprimer</a>
+             <a href="{% url 'litrevu:delete_review' review.id %}">Supprimer</a>
        </div>
     {% endif %}
 

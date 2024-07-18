@@ -13,6 +13,8 @@ urlpatterns = [
     path("userPosts", litRevu.views.UserPostsView.as_view(), name="user_posts"),
     path("ticketModification/<slug:pk>/", litRevu.views.TicketModification.as_view(), name="ticket_modification"),
     path("reviewModification/<slug:pk>/", litRevu.views.ReviewModification.as_view(), name="review_modification"),
+    path("deleteReview/<slug:pk>/", litRevu.views.DeleteReview.as_view(), name="delete_review"),
+    path("deleteTicket/<slug:pk>/", litRevu.views.DeleteTicket.as_view(), name="delete_ticket")
 
 ]
 
