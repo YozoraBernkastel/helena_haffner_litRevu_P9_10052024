@@ -1,7 +1,7 @@
 from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, UpdateView, DeleteView
+from django.views.generic import CreateView, View, UpdateView, DeleteView, ListView
 from django.db.models import CharField, Value
 from django.shortcuts import render, redirect, get_object_or_404
 from authentication.models import User
@@ -160,6 +160,15 @@ class UserPostsView(View):
 
 
 @method_decorator(login_required, name='dispatch')
+class UserTicketsView(ListView):
+    paginate_by = 5
+    model = Ticket
+
+    def get_queryset(self):
+        return Ticket.objects.filter(user=self.request.user).order_by('-time_created')
+
+
+@method_decorator(login_required, name='dispatch')
 class TicketModification(UpdateView):
     model = Ticket
     form_class = TicketCreationForm
@@ -172,6 +181,15 @@ class DeleteTicket(DeleteView):
     model = Ticket
     template_name = "litRevu/delete.html"
     success_url = "/litRevu/userPosts"
+
+
+@method_decorator(login_required, name='dispatch')
+class UserReviewsView(ListView):
+    paginate_by = 5
+    model = Review
+
+    def get_queryset(self):
+        return Review.objects.filter(user=self.request.user).order_by('-time_created')
 
 
 @method_decorator(login_required, name='dispatch')

@@ -18,8 +18,8 @@
     {% endif %}
      {% if show_button %}
        <div>
-             <a href="{% url 'litrevu:review_modification' review.id %}">Modifier</a>
-             <a href="{% url 'litrevu:delete_review' review.id %}">Supprimer</a>
+             <a href="{% url 'litrevu:review_modification' review.id %}" class="button">Modifier</a>
+             <a href="{% url 'litrevu:delete_review' review.id %}" class="button">Supprimer</a>
        </div>
     {% endif %}
 

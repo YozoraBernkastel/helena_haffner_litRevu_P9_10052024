@@ -2,14 +2,9 @@
     {% block content %}
         <div>
 
-            <h1>Vos Posts</h1>
+            {% include 'litRevu/_user_content_nav.html' %}
 
-            <div>
-                <ul>
-                    <li><a href="">Mes tickets (page à faire)</a></li>
-                    <li><a href="">Mes Critiques (page à faire)</a></li>
-                </ul>
-            </div>
+             <h1>Vos Posts</h1>
 
             {% if content_exists %}
                 {% for post in posts %}
