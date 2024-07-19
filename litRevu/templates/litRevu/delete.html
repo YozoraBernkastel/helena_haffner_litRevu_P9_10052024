@@ -1,15 +1,15 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
 
-<form method="post">{% csrf_token %}
-<!--    todo tenter de d'identifier s'il s'agit d'un ticket ou d'une review afin de personnaliser -->
-    <p> >Veuillez confirmer la suppression ?</p>
+        <form method="post">{% csrf_token %}
+        <!--    todo tenter de d'identifier s'il s'agit d'un ticket ou d'une review afin de personnaliser -->
+            <p> >Veuillez confirmer la suppression ?</p>
 
-    <div>
-        <a href="{% url 'litrevu:user_posts' request.user.pk %}" class="button">Annuler</a>
-        <input type="submit" value="Confirmer">
-    </div>
+            <div>
+                <a href="{% url 'litrevu:user_posts' request.user.pk %}" class="button">Annuler</a>
+                <input type="submit" value="Confirmer">
+            </div>
 
-</form>
+        </form>
 
 {% endblock content %}

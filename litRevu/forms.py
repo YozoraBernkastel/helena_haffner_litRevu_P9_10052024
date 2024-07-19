@@ -15,11 +15,11 @@ class ReviewCreationForm(forms.ModelForm):
     CHOICES = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
     note = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
 
-    #réécrire le init et définir dedans le widget de rating
+    # todo réécrire le init et définir dedans le widget de rating
 
     class Meta:
         model = Review
-        fields = ("headline", "note", "rating", "body")
+        fields = ("headline", "note", "body")
 
 
 class SubscribeCreationForm(forms.ModelForm):

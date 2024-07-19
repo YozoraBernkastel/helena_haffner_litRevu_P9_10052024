@@ -2,10 +2,13 @@
 {% block content %}
 
     <section>
-        <h1>Vos Contributions</h1>
-         {% include 'litRevu/_user_content_nav.html' %}
-
-        {% include 'litRevu/display_content.html' %}
+        {% if other_user %}
+            <h1>Les Contributions de {{ user_name }} </h1>
+        {% else %}
+            {% include 'litRevu/_user_content_nav.html' %}
+            <h1>Vos Contributions</h1>
+        {% endif %}
+        {% include 'litRevu/_display_content.html' %}
     </section>
 
 {% endblock content %}

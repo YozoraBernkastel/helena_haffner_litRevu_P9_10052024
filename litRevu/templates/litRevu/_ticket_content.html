@@ -21,8 +21,10 @@
     {% if ticket.image %}
     <img src="{{ ticket.image.url }}" alt="couverture du livre {{ ticket.title }}">
     {% endif %}
-    {% if flux and not review %}
-        <a href="{% url 'litrevu:review_creation' ticket.pk %}">En écrire la critique</a>
+    {% if not review %}
+        {% if flux or other_user %}
+            <a href="{% url 'litrevu:review_creation' ticket.pk %}">En écrire la critique</a>
+        {% endif %}
     {% endif %}
 
     {% if request.user == ticket.user and not flux and not review  %}

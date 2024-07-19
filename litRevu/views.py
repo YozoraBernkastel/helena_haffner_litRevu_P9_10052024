@@ -143,7 +143,7 @@ class TicketReviewCreationView(View):
         return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})
 
     def post(self, request):
-        ticket_form = TicketCreationForm(request.POST)
+        ticket_form = TicketCreationForm(request.POST, request.FILES)
         review_form = ReviewCreationForm(request.POST)
 
         ticket_form.instance.user = self.request.user
@@ -167,14 +167,18 @@ class UserPostsView(ListView):
     paginate_by = 5
     template_name = "litRevu/user_posts.html"
 
+    def get_context_data(self, **kwargs):
+        kwargs["other_user"] = self.request.user.pk != int(self.kwargs["pk"])
+        kwargs["user_name"] = get_object_or_404(User, id=self.kwargs["pk"])
+        return super().get_context_data(**kwargs)
+
     def get_queryset(self):
-        user = User.objects.filter(id=self.kwargs["pk"]).first() # todo mettre 404)
+        user = get_object_or_404(User, id=self.kwargs["pk"])
         user_tickets = Ticket.objects.filter(user=user)
         user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
         user_reviews = Review.objects.filter(user=user)
         user_reviews = user_reviews.annotate(content_type=Value('Reviews', CharField()))
 
-        is_own_post = self.request.user.pk == self.kwargs["pk"]
         return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
 
 
@@ -184,7 +188,8 @@ class UserTicketsView(ListView):
     template_name = "litRevu/tickets_list.html"
 
     def get_queryset(self):
-        # Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering -- idem pour tickets qui est défini en même temp que la pk
+        # - Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering
+        # - idem pour tickets qui est défini en même temp que la pk
         return self.request.user.tickets.all()
 
 
@@ -194,6 +199,8 @@ class TicketModification(UpdateView):
     form_class = TicketCreationForm
     template_name = "litRevu/ticket_modification.html"
 
+    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
+
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
 
@@ -202,6 +209,8 @@ class TicketModification(UpdateView):
 class DeleteTicket(DeleteView):
     model = Ticket
     template_name = "litRevu/delete.html"
+
+    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -213,19 +222,26 @@ class UserReviewsView(ListView):
     template_name = "litRevu/reviews_list.html"
 
     def get_queryset(self):
-        # Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering -- idem pour tickets qui est défini en même temp que la pk
+        # - Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering
+        # - Idem pour tickets qui est défini en même temp que la pk
         return self.request.user.reviews.all()
 
 
 @method_decorator(login_required, name='dispatch')
 class ReviewModification(UpdateView):
-    # todo le rating n'est pas automatiquement ajouté, il faut voir si on peut le faire pour éviter de renoter à chaque fois qu'on modifie la review.
-    # todo Peut-être faut-il faire quelque chose dans forms.py plutôt qu'ici ?
 
-    # todo peut-être utiliset get_initial pour lier rating et note
+    # todo peut-être utiliser get_initial pour lier rating et note
     model = Review
     form_class = ReviewCreationForm
     template_name = "litRevu/review_modification.html"
+
+    # def get_initial(self):
+    #     initial = super().get_initial()
+    #     review = Review.objects.filter(pk=self.kwargs["pk"])
+    #     initial["note"] = review.rating
+    #     return initial
+
+    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -237,9 +253,9 @@ class ReviewModification(UpdateView):
 
 @method_decorator(login_required, name='dispatch')
 class DeleteReview(DeleteView):
-    # todo faut-il vérifier que l'utilisateur est bien l'auteur de la review avant de delete ?
     model = Review
     template_name = "litRevu/delete.html"
+    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.id}"
