@@ -1,6 +1,7 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
 <section>
+    {%if own_user %}
         <h1>Modifier une critique</h1>
 
         <article>
@@ -17,5 +18,8 @@
 
             <button type="submit" >Envoyer</button>
         </form>
+    {% else %}
+        <h1>Vous n'avez rien à faire ici è_é</h1>
+    {% endif %}
 </section>
 {% endblock content %}

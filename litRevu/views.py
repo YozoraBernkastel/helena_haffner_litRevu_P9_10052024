@@ -199,7 +199,10 @@ class TicketModification(UpdateView):
     form_class = TicketCreationForm
     template_name = "litRevu/ticket_modification.html"
 
-    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
+    def get_context_data(self, **kwargs):
+        ticket = Ticket.objects.get(pk=self.kwargs["pk"])
+        kwargs["own_user"] = self.request.user == ticket.user
+        return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -210,7 +213,10 @@ class DeleteTicket(DeleteView):
     model = Ticket
     template_name = "litRevu/delete.html"
 
-    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
+    def get_context_data(self, **kwargs):
+        ticket = Ticket.objects.get(pk=self.kwargs["pk"])
+        kwargs["own_user"] = self.request.user == ticket.user
+        return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -241,7 +247,10 @@ class ReviewModification(UpdateView):
     #     initial["note"] = review.rating
     #     return initial
 
-    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
+    def get_context_data(self, **kwargs):
+        review = Review.objects.get(pk=self.kwargs["pk"])
+        kwargs["own_user"] = self.request.user == review.user
+        return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -255,7 +264,11 @@ class ReviewModification(UpdateView):
 class DeleteReview(DeleteView):
     model = Review
     template_name = "litRevu/delete.html"
-    # todo gérer le cas où un utilisateur jouerai avec les urls pour supprimer ou modifier les posts d'autres utilisateurs
+
+    def get_context_data(self, **kwargs):
+        review = Review.objects.get(pk=self.kwargs["pk"])
+        kwargs["own_user"] = self.request.user == review.user
+        return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.id}"
