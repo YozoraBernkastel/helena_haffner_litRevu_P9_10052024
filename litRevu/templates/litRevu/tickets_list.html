@@ -1,0 +1,13 @@
+{% extends 'litRevu/layout.html' %}
+{% block content %}
+
+{% include 'litRevu/_user_content_nav.html' %}
+<section>
+    <h1>Vos Tickets</h1>
+    {% for ticket in page_obj %}
+        {% include 'litRevu/_ticket_content.html' %}
+    {% endfor %}
+</section>
+
+
+{% endblock content %}

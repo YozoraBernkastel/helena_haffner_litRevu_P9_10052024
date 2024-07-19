@@ -113,6 +113,7 @@ class ReviewCreationView(CreateView):
         """
         if self._ticket is None:
             self._ticket = get_object_or_404(Ticket, pk=self.kwargs["pk"])
+            print(f"{self._ticket}")
 
         return self._ticket
 
@@ -164,7 +165,7 @@ class TicketReviewCreationView(View):
 @method_decorator(login_required, name='dispatch')
 class UserPostsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/display_content.html"
+    template_name = "litRevu/user_posts.html"
 
     def get_queryset(self):
         user = User.objects.filter(id=self.kwargs["pk"]).first() # todo mettre 404)
@@ -172,18 +173,19 @@ class UserPostsView(ListView):
         user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
         user_reviews = Review.objects.filter(user=user)
         user_reviews = user_reviews.annotate(content_type=Value('Reviews', CharField()))
+
+        is_own_post = self.request.user.pk == self.kwargs["pk"]
         return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
 
 
 @method_decorator(login_required, name='dispatch')
 class UserTicketsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/display_content.html"
+    template_name = "litRevu/tickets_list.html"
 
     def get_queryset(self):
         # Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering -- idem pour tickets qui est défini en même temp que la pk
-        user_tickets = self.request.user.tickets.all()
-        return user_tickets.annotate(content_type=Value('Ticket', CharField()))
+        return self.request.user.tickets.all()
 
 
 @method_decorator(login_required, name='dispatch')
@@ -208,12 +210,11 @@ class DeleteTicket(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class UserReviewsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/display_content.html"
+    template_name = "litRevu/reviews_list.html"
 
     def get_queryset(self):
         # Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering -- idem pour tickets qui est défini en même temp que la pk
-        user_reviews = Review.objects.filter(user=self.request.user).order_by('-time_created')
-        return user_reviews.annotate(content_type=Value('Reviews', CharField()))
+        return self.request.user.reviews.all()
 
 
 @method_decorator(login_required, name='dispatch')

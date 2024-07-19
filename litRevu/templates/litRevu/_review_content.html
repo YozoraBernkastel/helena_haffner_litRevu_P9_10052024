@@ -16,7 +16,7 @@
         {% include 'litRevu/_ticket_content.html' with ticket=review.ticket %}
     </div>
 
-    {% if flux %}
+    {% if flux or request.user != review.user %}
         <a href="{% url 'litrevu:review_creation' review.pk %}">En écrire la critique</a>
     {% endif %}
 

@@ -1,0 +1,11 @@
+{% extends 'litRevu/layout.html' %}
+{% block content %}
+
+    <section>
+        <h1>Vos Contributions</h1>
+         {% include 'litRevu/_user_content_nav.html' %}
+
+        {% include 'litRevu/display_content.html' %}
+    </section>
+
+{% endblock content %}
