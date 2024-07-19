@@ -190,14 +190,18 @@ class TicketModification(UpdateView):
     model = Ticket
     form_class = TicketCreationForm
     template_name = "litRevu/ticket_modification.html"
-    success_url = "/litRevu/userPosts"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
 
 
 @method_decorator(login_required, name='dispatch')
 class DeleteTicket(DeleteView):
     model = Ticket
     template_name = "litRevu/delete.html"
-    success_url = "/litRevu/userPosts"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
 
 
 @method_decorator(login_required, name='dispatch')
@@ -218,7 +222,9 @@ class ReviewModification(UpdateView):
     form_class = ReviewCreationForm
     # form_class = form_class.CHOICES(initial={'note': Review.rating})
     template_name = "litRevu/review_modification.html"
-    success_url = "/litRevu/userPosts"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
 
     def form_valid(self, form):
         form.instance.rating = form.cleaned_data["note"]
@@ -230,7 +236,9 @@ class DeleteReview(DeleteView):
     # todo faut-il vérifier que l'utilisateur est bien l'auteur de la review avant de delete ?
     model = Review
     template_name = "litRevu/delete.html"
-    success_url = "/litRevu/userPosts"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
 
 
 

@@ -5,7 +5,7 @@
          {% elif request.user == review.ticket.user %}
             <p><a href="{% url 'litrevu:user_posts' review.user.id %}">{{ review.user }}</a> a répondu à votre demande</p>
         {% else %}
-            <p class="type of post"><a href="">{{ review.user }}</a> a publié une critique</p>
+            <p class="type of post"><a href="{% url 'litrevu:user_posts' review.user.id %}">{{ review.user }}</a> a publié une critique</p>
          {% endif %}
 
         <p class="date">{{ review.time_created }}</p>

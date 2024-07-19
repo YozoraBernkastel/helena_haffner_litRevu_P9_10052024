@@ -7,7 +7,7 @@
             {% endif %}
         {% else %}
             {% if show_button %}
-                <p>Ticket de {{ ticket.user }}</p>
+                <p>Ticket de <a href="{% url 'litrevu:user_posts' request.user.id %}">{{ ticket.user }}</a></p>
             {% else %}
                 <p class="type of post"><a href="{% url 'litrevu:user_posts' request.user.id %}">{{ ticket.user }}</a> a demandé une critique</p>
             {% endif %}

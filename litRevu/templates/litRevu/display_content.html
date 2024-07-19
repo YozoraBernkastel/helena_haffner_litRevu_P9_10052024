@@ -1,8 +1,9 @@
 {% extends 'litRevu/layout.html' %}
     {% block content %}
         <div>
-
-            {% include 'litRevu/_user_content_nav.html' %}
+            {% if not flux %}
+                {% include 'litRevu/_user_content_nav.html' %}
+            {% endif %}
 
              <h1>Vos Posts</h1>
 
@@ -19,10 +20,7 @@
                                 </div>
                             </article>
                      {% endif %}
-                <div>
-                     <a href=""></a>
-                     <a href=""></a>
-                </div>
+               
                 {% endfor %}
 
             {% include 'litRevu/_page_navigation.html' %}
