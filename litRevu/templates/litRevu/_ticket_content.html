@@ -7,9 +7,9 @@
             {% endif %}
         {% else %}
             {% if show_button %}
-                <p>Ticket de <a href="{% url 'litrevu:user_posts' request.user.id %}">{{ ticket.user }}</a></p>
+                <p>Ticket de <a href="{% url 'litrevu:user_posts' ticket.user.pk %}">{{ ticket.user }}</a></p>
             {% else %}
-                <p class="type of post"><a href="{% url 'litrevu:user_posts' request.user.id %}">{{ ticket.user }}</a> a demandé une critique</p>
+                <p class="type of post"><a href="{% url 'litrevu:user_posts' ticket.user.pk %}">{{ ticket.user }}</a> a demandé une critique</p>
             {% endif %}
 
          {% endif %}
@@ -22,13 +22,13 @@
     <img src="{{ ticket.image.url }}" alt="couverture du livre {{ ticket.title }}">
     {% endif %}
     {% if flux and not review %}
-        <a href="{% url 'litrevu:review_creation' ticket.id %}">En écrire la critique</a>
+        <a href="{% url 'litrevu:review_creation' ticket.pk %}">En écrire la critique</a>
     {% endif %}
 
     {% if request.user == ticket.user and not flux and not review  %}
        <div>
-             <a href="{% url 'litrevu:ticket_modification' ticket.id %}" class="button">Modifier</a>
-             <a href="{% url 'litrevu:delete_ticket' ticket.id %}" class="button">Supprimer</a>
+             <a href="{% url 'litrevu:ticket_modification' ticket.pk %}" class="button">Modifier</a>
+             <a href="{% url 'litrevu:delete_ticket' ticket.pk %}" class="button">Supprimer</a>
        </div>
 
     {% endif %}

@@ -43,7 +43,7 @@
         <ul>
             {% if followers %}
                 {% for follower in followers %}
-                <li class="follower_li"><a href="{% url 'litrevu:user_posts' follower.user.id %}">{{ follower.user }}</a></li>
+                <li class="follower_li"><a href="{% url 'litrevu:user_posts' follower.user.pk %}">{{ follower.user }}</a></li>
                 {% endfor %}
             {% else %}
                 <li>Aucun abonné</li>

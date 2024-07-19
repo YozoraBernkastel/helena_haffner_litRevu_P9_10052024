@@ -112,7 +112,7 @@ class ReviewCreationView(CreateView):
             cache personalisé pour _ticket
         """
         if self._ticket is None:
-            self._ticket = get_object_or_404(Ticket, pk=self.kwargs["id"])
+            self._ticket = get_object_or_404(Ticket, pk=self.kwargs["pk"])
 
         return self._ticket
 
@@ -167,7 +167,7 @@ class UserPostsView(ListView):
     template_name = "litRevu/display_content.html"
 
     def get_queryset(self):
-        user = User.objects.get(id=self.kwargs["pk"])
+        user = User.objects.filter(id=self.kwargs["pk"]).first() # todo mettre 404)
         user_tickets = Ticket.objects.filter(user=user)
         user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
         user_reviews = Review.objects.filter(user=user)
@@ -181,7 +181,8 @@ class UserTicketsView(ListView):
     template_name = "litRevu/display_content.html"
 
     def get_queryset(self):
-        user_tickets = Ticket.objects.filter(user=self.request.user).order_by('-time_created')
+        # Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering -- idem pour tickets qui est défini en même temp que la pk
+        user_tickets = self.request.user.tickets.all()
         return user_tickets.annotate(content_type=Value('Ticket', CharField()))
 
 
@@ -192,7 +193,7 @@ class TicketModification(UpdateView):
     template_name = "litRevu/ticket_modification.html"
 
     def get_success_url(self):
-        return f"/litRevu/userPosts/{self.request.user.id}"
+        return f"/litRevu/userPosts/{self.request.user.pk}"
 
 
 @method_decorator(login_required, name='dispatch')
@@ -201,7 +202,7 @@ class DeleteTicket(DeleteView):
     template_name = "litRevu/delete.html"
 
     def get_success_url(self):
-        return f"/litRevu/userPosts/{self.request.user.id}"
+        return f"/litRevu/userPosts/{self.request.user.pk}"
 
 
 @method_decorator(login_required, name='dispatch')
@@ -210,6 +211,7 @@ class UserReviewsView(ListView):
     template_name = "litRevu/display_content.html"
 
     def get_queryset(self):
+        # Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering -- idem pour tickets qui est défini en même temp que la pk
         user_reviews = Review.objects.filter(user=self.request.user).order_by('-time_created')
         return user_reviews.annotate(content_type=Value('Reviews', CharField()))
 
@@ -218,13 +220,14 @@ class UserReviewsView(ListView):
 class ReviewModification(UpdateView):
     # todo le rating n'est pas automatiquement ajouté, il faut voir si on peut le faire pour éviter de renoter à chaque fois qu'on modifie la review.
     # todo Peut-être faut-il faire quelque chose dans forms.py plutôt qu'ici ?
+
+    # todo peut-être utiliset get_initial pour lier rating et note
     model = Review
     form_class = ReviewCreationForm
-    # form_class = form_class.CHOICES(initial={'note': Review.rating})
     template_name = "litRevu/review_modification.html"
 
     def get_success_url(self):
-        return f"/litRevu/userPosts/{self.request.user.id}"
+        return f"/litRevu/userPosts/{self.request.user.pk}"
 
     def form_valid(self, form):
         form.instance.rating = form.cleaned_data["note"]

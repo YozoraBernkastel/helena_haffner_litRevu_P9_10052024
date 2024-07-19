@@ -8,7 +8,7 @@ import litRevu.views
 urlpatterns = [
     path("ticketCreation", litRevu.views.TicketCreationView.as_view(), name="ticket_creation"),
     path("ticket&reviewCreation", litRevu.views.TicketReviewCreationView.as_view(), name="ticket_review_creation"),
-    path("reviewCreation/<int:id>", litRevu.views.ReviewCreationView.as_view(), name="review_creation"),
+    path("reviewCreation/<int:pk>", litRevu.views.ReviewCreationView.as_view(), name="review_creation"),
     path("userPosts/<slug:pk>/", litRevu.views.UserPostsView.as_view(), name="user_posts"),
     path("userTickets", litRevu.views.UserTicketsView.as_view(), name="user_tickets"),
     path("userReviews", litRevu.views.UserReviewsView.as_view(), name="user_reviews"),
