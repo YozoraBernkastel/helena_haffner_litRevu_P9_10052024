@@ -1,17 +1,39 @@
+from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View
+from django.views.generic import CreateView, View, UpdateView, DeleteView, ListView
+from django.db.models import CharField, Value
 from django.shortcuts import render, redirect, get_object_or_404
 from authentication.models import User
 from litRevu.forms import TicketCreationForm, ReviewCreationForm, SubscribeCreationForm
 from django.utils.decorators import method_decorator
-from litRevu.models import Ticket, UserFollows
+from litRevu.models import Ticket, Review, UserFollows
 
 
-@login_required()
-def flux(request):
-    tickets = Ticket.objects.all()
-    return render(request, "litRevu/flux.html", {"tickets": tickets, "flux": True})
+@method_decorator(login_required, name='dispatch')
+class Flux(ListView):
+    paginate_by = 10
+    template_name = "litRevu/flux.html"
+
+    @staticmethod
+    def add_to_flux_content(this_user, user_tickets, user_reviews):
+        tickets = Ticket.objects.filter(user=this_user)
+        user_tickets += tickets.annotate(content_type=Value('Ticket', CharField()))
+        reviews = Review.objects.filter(user=this_user)
+        user_reviews += reviews.annotate(content_type=Value('Reviews', CharField()))
+
+    def get_queryset(self):
+        user_tickets = []
+        user_reviews = []
+
+        self.add_to_flux_content(self.request.user, user_tickets, user_reviews)
+
+        subs = UserFollows.objects.filter(user=self.request.user)
+
+        for followed in subs:
+            self.add_to_flux_content(followed.followed_user, user_tickets, user_reviews)
+
+        return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -30,7 +52,7 @@ class SubCreationView(CreateView):
 
 @login_required()
 def sub_to(request):
-    template: str = 'litRevu/subscriptions_table.html'
+    template: str = 'litRevu/_subscriptions_table.html'
     follow = request.POST.get("followed_user")
     try:
         user_to_follow = User.objects.get(username=follow)
@@ -63,7 +85,7 @@ def unsub_to(request, unfollow_user):
     if follow_obj:
         follow_obj.delete()
         subs = UserFollows.objects.filter(user=request.user)
-        return render(request, 'litRevu/subscriptions_table.html', {'subs': subs})
+        return render(request, 'litRevu/_subscriptions_table.html', {'subs': subs})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -95,7 +117,7 @@ class ReviewCreationView(CreateView):
         return self._ticket
 
     def get_context_data(self, **kwargs):
-        kwargs["ticket"] = self.ticket
+        kwargs["content"] = self.ticket
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -137,3 +159,89 @@ class TicketReviewCreationView(View):
                 return redirect("flux")
 
         return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})
+
+
+@method_decorator(login_required, name='dispatch')
+class UserPostsView(ListView):
+    paginate_by = 5
+    template_name = "litRevu/display_content.html"
+
+    def get_queryset(self):
+        user = User.objects.get(id=self.kwargs["pk"])
+        user_tickets = Ticket.objects.filter(user=user)
+        user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
+        user_reviews = Review.objects.filter(user=user)
+        user_reviews = user_reviews.annotate(content_type=Value('Reviews', CharField()))
+        return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
+
+
+@method_decorator(login_required, name='dispatch')
+class UserTicketsView(ListView):
+    paginate_by = 5
+    template_name = "litRevu/display_content.html"
+
+    def get_queryset(self):
+        user_tickets = Ticket.objects.filter(user=self.request.user).order_by('-time_created')
+        return user_tickets.annotate(content_type=Value('Ticket', CharField()))
+
+
+@method_decorator(login_required, name='dispatch')
+class TicketModification(UpdateView):
+    model = Ticket
+    form_class = TicketCreationForm
+    template_name = "litRevu/ticket_modification.html"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
+
+
+@method_decorator(login_required, name='dispatch')
+class DeleteTicket(DeleteView):
+    model = Ticket
+    template_name = "litRevu/delete.html"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
+
+
+@method_decorator(login_required, name='dispatch')
+class UserReviewsView(ListView):
+    paginate_by = 5
+    template_name = "litRevu/display_content.html"
+
+    def get_queryset(self):
+        user_reviews = Review.objects.filter(user=self.request.user).order_by('-time_created')
+        return user_reviews.annotate(content_type=Value('Reviews', CharField()))
+
+
+@method_decorator(login_required, name='dispatch')
+class ReviewModification(UpdateView):
+    # todo le rating n'est pas automatiquement ajouté, il faut voir si on peut le faire pour éviter de renoter à chaque fois qu'on modifie la review.
+    # todo Peut-être faut-il faire quelque chose dans forms.py plutôt qu'ici ?
+    model = Review
+    form_class = ReviewCreationForm
+    # form_class = form_class.CHOICES(initial={'note': Review.rating})
+    template_name = "litRevu/review_modification.html"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
+
+    def form_valid(self, form):
+        form.instance.rating = form.cleaned_data["note"]
+        return super().form_valid(form)
+
+
+@method_decorator(login_required, name='dispatch')
+class DeleteReview(DeleteView):
+    # todo faut-il vérifier que l'utilisateur est bien l'auteur de la review avant de delete ?
+    model = Review
+    template_name = "litRevu/delete.html"
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.id}"
+
+
+
+
+
+

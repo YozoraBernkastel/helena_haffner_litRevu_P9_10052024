@@ -9,8 +9,8 @@
     {% if user.is_authenticated %}
             <ul>
                 <li><a href="{% url 'flux' %}">Mon Flux</a></li>
-                <li><a href="">Mes Posts</a></li>
-                <li><a href="{% url 'litrevu:sub_page' %}">Gérer mes Abonnements</a></li>
+                <li><a href="{% url 'litrevu:user_posts' request.user.id %}">Mes Posts</a></li>
+                <li><a href="{% url 'litrevu:sub_page' %}">Mes Abonnements</a></li>
                 {% if user.is_superuser %}
                 <li>
                     <a href="{% url 'admin:index' %}">Admin</a>
@@ -31,6 +31,11 @@
     {% endfor %}
 </ul>
 {% endif %}
+
+    <div>
+        <a href="{% url 'litrevu:ticket_creation' %}" class="reviewButton">Demander une critique</a>
+        <a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Écrire une nouvelle critique</a>
+    </div>
 
     {% endif %}
     {% block content %}{% endblock content %}

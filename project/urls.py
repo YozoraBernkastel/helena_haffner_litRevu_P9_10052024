@@ -27,7 +27,7 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("", LoginView.as_view(template_name='authentication/login.html',
                                redirect_authenticated_user=True), name="login"),
-    path("flux", litRevu.views.flux, name="flux"),
+    path("flux", litRevu.views.Flux.as_view(), name="flux"),
     path("auth/", include(("authentication.urls", "auth"))),
     path("litRevu/", include(("litRevu.urls", "litrevu"))),
 ]

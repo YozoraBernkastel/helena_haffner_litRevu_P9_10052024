@@ -1,15 +1,6 @@
-{% extends 'litRevu/layout.html' %}
+
 {% block content %}
-<div>
-    <a href="{% url 'litrevu:ticket_creation' %}" class="reviewButton">Demander une critique</a>
-    <a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Écrire une nouvelle critique</a>
-</div>
-<div>
-    {% for ticket in tickets %}
-         <article>
-             {% include 'litRevu/_ticket_content.html' %}
-         </article>
-    {% endfor %}
-</div>
+
+    {% include 'litRevu/display_content.html' with flux=True %}
 
 {% endblock content %}
