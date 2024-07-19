@@ -1,12 +1,6 @@
-{% extends 'litRevu/layout.html' %}
+
 {% block content %}
 
-<div>
-    {% for ticket in tickets %}
-         <article>
-             {% include 'litRevu/_ticket_content.html' with hide_button=True%}
-         </article>
-    {% endfor %}
-</div>
+    {% include 'litRevu/display_content.html' with flux=True %}
 
 {% endblock content %}

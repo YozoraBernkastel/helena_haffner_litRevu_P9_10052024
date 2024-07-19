@@ -10,11 +10,30 @@ from django.utils.decorators import method_decorator
 from litRevu.models import Ticket, Review, UserFollows
 
 
-@login_required()
-def flux(request):
-    # todo il faudra faire en sorte de ne récupérer que les tickets des personnes suivies (et de l'utilisateur ?)
-    tickets = Ticket.objects.all()
-    return render(request, "litRevu/flux.html", {"tickets": tickets, "flux": True})
+@method_decorator(login_required, name='dispatch')
+class Flux(ListView):
+    paginate_by = 10
+    template_name = "litRevu/flux.html"
+
+    @staticmethod
+    def add_to_flux_content(this_user, user_tickets, user_reviews):
+        tickets = Ticket.objects.filter(user=this_user)
+        user_tickets += tickets.annotate(content_type=Value('Ticket', CharField()))
+        reviews = Review.objects.filter(user=this_user)
+        user_reviews += reviews.annotate(content_type=Value('Reviews', CharField()))
+
+    def get_queryset(self):
+        user_tickets = []
+        user_reviews = []
+
+        self.add_to_flux_content(self.request.user, user_tickets, user_reviews)
+
+        subs = UserFollows.objects.filter(user=self.request.user)
+
+        for followed in subs:
+            self.add_to_flux_content(followed.followed_user, user_tickets, user_reviews)
+
+        return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -145,38 +164,21 @@ class TicketReviewCreationView(View):
 @method_decorator(login_required, name='dispatch')
 class UserPostsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/user_posts.html"
+    template_name = "litRevu/display_content.html"
 
     def get_queryset(self):
-        user_tickets = Ticket.objects.filter(user=self.request.user)
+        user = User.objects.get(id=self.kwargs["pk"])
+        user_tickets = Ticket.objects.filter(user=user)
         user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
-        user_reviews = Review.objects.filter(user=self.request.user)
+        user_reviews = Review.objects.filter(user=user)
         user_reviews = user_reviews.annotate(content_type=Value('Reviews', CharField()))
-        return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
-
-
-@method_decorator(login_required, name='dispatch')
-class PersonalFlux(ListView):
-    paginate_by = 10
-    template_name = "litRevu/user_posts.html"
-
-    def get_queryset(self):
-        subs = UserFollows.objects.filter(user=self.request.user)
-        user_tickets = []
-        user_reviews = []
-        for followed in subs:
-            tickets = Ticket.objects.filter(user=followed.followed_user)
-            user_tickets += tickets.annotate(content_type=Value('Ticket', CharField()))
-            reviews = Review.objects.filter(user=followed.followed_user)
-            user_reviews.append(reviews.annotate(content_type=Value('Reviews', CharField())))
-
         return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
 
 
 @method_decorator(login_required, name='dispatch')
 class UserTicketsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/user_posts.html"
+    template_name = "litRevu/display_content.html"
 
     def get_queryset(self):
         user_tickets = Ticket.objects.filter(user=self.request.user).order_by('-time_created')
@@ -201,7 +203,7 @@ class DeleteTicket(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class UserReviewsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/user_posts.html"
+    template_name = "litRevu/display_content.html"
 
     def get_queryset(self):
         user_reviews = Review.objects.filter(user=self.request.user).order_by('-time_created')

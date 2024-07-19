@@ -43,7 +43,7 @@
         <ul>
             {% if followers %}
                 {% for follower in followers %}
-                <li class="follower_li">{{ follower.user }}</li>
+                <li class="follower_li"><a href="{% url 'litrevu:user_posts' follower.user.id %}">{{ follower.user }}</a></li>
                 {% endfor %}
             {% else %}
                 <li>Aucun abonné</li>
@@ -58,7 +58,7 @@
     document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
     })
-    </script>
+ </script>
 
    {% load static %}
     <script src="{% static 'HTMX/htmx.min.js' %}" defer></script>
