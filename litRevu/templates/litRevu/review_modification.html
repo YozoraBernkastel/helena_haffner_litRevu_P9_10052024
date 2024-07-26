@@ -1,21 +1,19 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
 <section>
-    <h1>Modifier une critique</h1>
-
-    <article>
-        <p>Réponse au ticket</p>
-         {% include 'litRevu/_ticket_content.html' with ticket=review.ticket %}
-    </article>
-
-    <form method="post">
+        <h2>Modifier une critique</h2>
         <article>
-             <h1>Critique</h1>
-            {% csrf_token %}
-            {{ form }}
+            <p>Réponse au ticket</p>
+             {% include 'litRevu/_ticket_content.html' with ticket=review.ticket %}
         </article>
 
-        <button type="submit" >Envoyer</button>
-    </form>
+        <form method="post">
+            <article>
+                 <h1>Critique</h1>
+                {% csrf_token %}
+                {{ form }}
+            </article>
+            <button type="submit" >Envoyer</button>
+        </form>
 </section>
 {% endblock content %}

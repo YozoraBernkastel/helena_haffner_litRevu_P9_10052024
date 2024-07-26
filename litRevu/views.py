@@ -112,7 +112,8 @@ class ReviewCreationView(CreateView):
             cache personalisé pour _ticket
         """
         if self._ticket is None:
-            self._ticket = get_object_or_404(Ticket, pk=self.kwargs["id"])
+            self._ticket = get_object_or_404(Ticket, pk=self.kwargs["pk"])
+            print(f"{self._ticket}")
 
         return self._ticket
 
@@ -121,7 +122,6 @@ class ReviewCreationView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        form.instance.rating = form.cleaned_data["note"]
         form.instance.user = self.request.user
         form.instance.ticket = self.ticket
 
@@ -142,7 +142,7 @@ class TicketReviewCreationView(View):
         return render(request, self.template_name, context={"form": ticket_form, "form2": review_form})
 
     def post(self, request):
-        ticket_form = TicketCreationForm(request.POST)
+        ticket_form = TicketCreationForm(request.POST, request.FILES)
         review_form = ReviewCreationForm(request.POST)
 
         ticket_form.instance.user = self.request.user
@@ -152,7 +152,6 @@ class TicketReviewCreationView(View):
 
             if review_form.is_valid():
                 review_form.instance.ticket_id = ticket.id
-                review_form.instance.rating = review_form.cleaned_data["note"]
                 review_form.instance.user = self.request.user
                 review_form.save()
 
@@ -164,35 +163,49 @@ class TicketReviewCreationView(View):
 @method_decorator(login_required, name='dispatch')
 class UserPostsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/display_content.html"
+    template_name = "litRevu/user_posts.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs["other_user"] = self.request.user.pk != int(self.kwargs["pk"])
+        kwargs["user_name"] = get_object_or_404(User, id=self.kwargs["pk"])
+        return super().get_context_data(**kwargs)
 
     def get_queryset(self):
-        user = User.objects.get(id=self.kwargs["pk"])
+        user = get_object_or_404(User, id=self.kwargs["pk"])
         user_tickets = Ticket.objects.filter(user=user)
         user_tickets = user_tickets.annotate(content_type=Value('Ticket', CharField()))
         user_reviews = Review.objects.filter(user=user)
         user_reviews = user_reviews.annotate(content_type=Value('Reviews', CharField()))
+
         return sorted(chain(user_tickets, user_reviews), key=lambda post: post.time_created, reverse=True)
 
 
 @method_decorator(login_required, name='dispatch')
 class UserTicketsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/display_content.html"
+    template_name = "litRevu/tickets_list.html"
 
     def get_queryset(self):
-        user_tickets = Ticket.objects.filter(user=self.request.user).order_by('-time_created')
-        return user_tickets.annotate(content_type=Value('Ticket', CharField()))
+        # - Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering
+        # - idem pour tickets qui est défini en même temp que la pk
+        return self.request.user.tickets.all()
 
 
 @method_decorator(login_required, name='dispatch')
 class TicketModification(UpdateView):
-    model = Ticket
     form_class = TicketCreationForm
     template_name = "litRevu/ticket_modification.html"
 
+    def get_queryset(self):
+        return self.request.user.tickets.all()
+
+    # def get_context_data(self, **kwargs):
+    #     ticket = Ticket.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == ticket.user
+    #     return super().get_context_data(**kwargs)
+
     def get_success_url(self):
-        return f"/litRevu/userPosts/{self.request.user.id}"
+        return f"/litRevu/userPosts/{self.request.user.pk}"
 
 
 @method_decorator(login_required, name='dispatch')
@@ -200,42 +213,60 @@ class DeleteTicket(DeleteView):
     model = Ticket
     template_name = "litRevu/delete.html"
 
+    def get_queryset(self):
+        return self.request.user.tickets.all()
+
+    # def get_context_data(self, **kwargs):
+    #     ticket = Ticket.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == ticket.user
+    #     return super().get_context_data(**kwargs)
+
     def get_success_url(self):
-        return f"/litRevu/userPosts/{self.request.user.id}"
+        return f"/litRevu/userPosts/{self.request.user.pk}"
 
 
 @method_decorator(login_required, name='dispatch')
 class UserReviewsView(ListView):
     paginate_by = 5
-    template_name = "litRevu/display_content.html"
+    template_name = "litRevu/reviews_list.html"
 
     def get_queryset(self):
-        user_reviews = Review.objects.filter(user=self.request.user).order_by('-time_created')
-        return user_reviews.annotate(content_type=Value('Reviews', CharField()))
+        # - Les tickets sont automatiquement triés par date décroissante car dans le model, on a ajouté ordering
+        # - Idem pour tickets qui est défini en même temp que la pk
+        return self.request.user.reviews.all()
 
 
 @method_decorator(login_required, name='dispatch')
 class ReviewModification(UpdateView):
-    # todo le rating n'est pas automatiquement ajouté, il faut voir si on peut le faire pour éviter de renoter à chaque fois qu'on modifie la review.
-    # todo Peut-être faut-il faire quelque chose dans forms.py plutôt qu'ici ?
+
     model = Review
     form_class = ReviewCreationForm
-    # form_class = form_class.CHOICES(initial={'note': Review.rating})
     template_name = "litRevu/review_modification.html"
 
-    def get_success_url(self):
-        return f"/litRevu/userPosts/{self.request.user.id}"
+    def get_queryset(self):
+        return self.request.user.reviews.all()
 
-    def form_valid(self, form):
-        form.instance.rating = form.cleaned_data["note"]
-        return super().form_valid(form)
+    # def get_context_data(self, **kwargs):
+    #     review = Review.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == review.user
+    #     return super().get_context_data(**kwargs)
+
+    def get_success_url(self):
+        return f"/litRevu/userPosts/{self.request.user.pk}"
 
 
 @method_decorator(login_required, name='dispatch')
 class DeleteReview(DeleteView):
-    # todo faut-il vérifier que l'utilisateur est bien l'auteur de la review avant de delete ?
     model = Review
     template_name = "litRevu/delete.html"
+
+    def get_queryset(self):
+        return self.request.user.reviews.all()
+
+    # def get_context_data(self, **kwargs):
+    #     review = Review.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == review.user
+    #     return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.id}"

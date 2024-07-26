@@ -1,6 +1,10 @@
-
+{% extends 'litRevu/layout.html' %}
 {% block content %}
 
-    {% include 'litRevu/display_content.html' with flux=True %}
+    <section>
+        <h2>Votre Flux</h2>
+
+        {% include 'litRevu/_display_content.html' with flux=True %}
+    </section>
 
 {% endblock content %}

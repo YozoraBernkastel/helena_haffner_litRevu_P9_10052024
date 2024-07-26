@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Pacifico&display=swap');
+
+html, body{
+        margin: 0;
+        padding: 0;
+}
+
+html{
+        font-family: "Pacifico", cursive;
+        text-align: center;
+        background-image: url("images/__ETxfU5-big_version_cut.jpeg");
+        text-align: center;
+	background-size: 100%;
+	background-attachment: fixed;
+}
+
+header, main{
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+}
+
+header{
+        width: 82%;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        background-image: url("images/__ETxfU5-big_version_cut.jpeg");
+        background-size: 122%;
+        background-position: top;
+	background-attachment: fixed;
+}
+
+main{ 
+        width: 80%;
+        padding-top: 100px;
+        min-height: 500px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: #000 solid 1px;
+}
+
+section {
+        margin-left: auto;
+        margin-right: auto;
+        width: 60%;
+}
+
+ul{
+        padding: 0;
+}
+
+li{
+        list-style-type: none;
+}
+
+a{
+        text-decoration: none;
+        color: #000;
+}
+
+header div{
+        display: flex;
+        justify-content: space-around;
+
+}
+
+
+header span{
+        width: 33%;
+}
+
+header h1{
+        
+        font-size: 2.5rem;
+        margin: 0;     
+}
+
+header h1 a {
+        color: #fff;
+        text-shadow: #000000 1px 10px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+header ul{
+        width: 33%;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 0;
+}
+
+header li{
+        background-color: black; /*temporaire */
+        border: solid black 1px;
+        border-bottom: 0;
+        border-radius: 10px;
+        width: 25%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+}
+
+header li a, header button{
+        color: #fff;
+        text-shadow: #000000 1px 5px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+header button{
+        background: none;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        font-family: "Pacifico", cursive;
+}
+
+header button:hover{
+        cursor: pointer;
+}
+
+#loginPage{
+        display: flex;
+        justify-content: center;
+}
+
+#loginPage div{
+        padding-top: 100px;
+        width: 50%;
+}
+
+form p{
+        text-align: right;
+}
+
+
+img{
+        width: 400px;
+}

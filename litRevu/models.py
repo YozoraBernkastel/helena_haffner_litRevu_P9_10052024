@@ -7,9 +7,12 @@ class Ticket(models.Model):
     title = models.CharField(max_length=128, verbose_name="titre")
     author = models.CharField(max_length=128, verbose_name="auteur")
     description = models.TextField(max_length=2048, blank=True)
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="tickets")
     image = models.ImageField(null=True, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = "-time_created",
 
 
 class Review(models.Model):
@@ -20,8 +23,11 @@ class Review(models.Model):
     headline = models.CharField(max_length=128, verbose_name="titre")
     body = models.CharField(max_length=8192, blank=True, verbose_name="commentaire") # Textfield possible pour récupérer un texte plutôt qu'une maxi ligne
     user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")
     time_created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = "-time_created",
 
 
 class UserFollows(models.Model):
