@@ -1,6 +1,5 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
-    {% if own_user %}
         <form method="post">{% csrf_token %}
         <!--    todo tenter de d'identifier s'il s'agit d'un ticket ou d'une review afin de personnaliser -->
             <p> >Veuillez confirmer la suppression ?</p>
@@ -11,8 +10,5 @@
             </div>
 
         </form>
-    {% else %}
-        <h1>Vous n'avez rien à faire ici è_é</h1>
-    {% endif %}
 
 {% endblock content %}

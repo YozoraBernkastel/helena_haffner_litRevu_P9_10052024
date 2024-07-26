@@ -3,10 +3,10 @@
 
     <section>
         {% if other_user %}
-            <h1>Les Contributions de {{ user_name }} </h1>
+            <h2>Les Contributions de {{ user_name }} </h2>
         {% else %}
             {% include 'litRevu/_user_content_nav.html' %}
-            <h1>Vos Contributions</h1>
+            <h2>Vos Contributions</h2>
         {% endif %}
         {% include 'litRevu/_display_content.html' %}
     </section>

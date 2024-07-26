@@ -122,7 +122,6 @@ class ReviewCreationView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        form.instance.rating = form.cleaned_data["note"]
         form.instance.user = self.request.user
         form.instance.ticket = self.ticket
 
@@ -153,7 +152,6 @@ class TicketReviewCreationView(View):
 
             if review_form.is_valid():
                 review_form.instance.ticket_id = ticket.id
-                review_form.instance.rating = review_form.cleaned_data["note"]
                 review_form.instance.user = self.request.user
                 review_form.save()
 
@@ -195,14 +193,16 @@ class UserTicketsView(ListView):
 
 @method_decorator(login_required, name='dispatch')
 class TicketModification(UpdateView):
-    model = Ticket
     form_class = TicketCreationForm
     template_name = "litRevu/ticket_modification.html"
 
-    def get_context_data(self, **kwargs):
-        ticket = Ticket.objects.get(pk=self.kwargs["pk"])
-        kwargs["own_user"] = self.request.user == ticket.user
-        return super().get_context_data(**kwargs)
+    def get_queryset(self):
+        return self.request.user.tickets.all()
+
+    # def get_context_data(self, **kwargs):
+    #     ticket = Ticket.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == ticket.user
+    #     return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -213,10 +213,13 @@ class DeleteTicket(DeleteView):
     model = Ticket
     template_name = "litRevu/delete.html"
 
-    def get_context_data(self, **kwargs):
-        ticket = Ticket.objects.get(pk=self.kwargs["pk"])
-        kwargs["own_user"] = self.request.user == ticket.user
-        return super().get_context_data(**kwargs)
+    def get_queryset(self):
+        return self.request.user.tickets.all()
+
+    # def get_context_data(self, **kwargs):
+    #     ticket = Ticket.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == ticket.user
+    #     return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -236,28 +239,20 @@ class UserReviewsView(ListView):
 @method_decorator(login_required, name='dispatch')
 class ReviewModification(UpdateView):
 
-    # todo peut-être utiliser get_initial pour lier rating et note
     model = Review
     form_class = ReviewCreationForm
     template_name = "litRevu/review_modification.html"
 
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     review = Review.objects.filter(pk=self.kwargs["pk"])
-    #     initial["note"] = review.rating
-    #     return initial
+    def get_queryset(self):
+        return self.request.user.reviews.all()
 
-    def get_context_data(self, **kwargs):
-        review = Review.objects.get(pk=self.kwargs["pk"])
-        kwargs["own_user"] = self.request.user == review.user
-        return super().get_context_data(**kwargs)
+    # def get_context_data(self, **kwargs):
+    #     review = Review.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == review.user
+    #     return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
-
-    def form_valid(self, form):
-        form.instance.rating = form.cleaned_data["note"]
-        return super().form_valid(form)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -265,10 +260,13 @@ class DeleteReview(DeleteView):
     model = Review
     template_name = "litRevu/delete.html"
 
-    def get_context_data(self, **kwargs):
-        review = Review.objects.get(pk=self.kwargs["pk"])
-        kwargs["own_user"] = self.request.user == review.user
-        return super().get_context_data(**kwargs)
+    def get_queryset(self):
+        return self.request.user.reviews.all()
+
+    # def get_context_data(self, **kwargs):
+    #     review = Review.objects.get(pk=self.kwargs["pk"])
+    #     kwargs["own_user"] = self.request.user == review.user
+    #     return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.id}"

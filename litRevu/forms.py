@@ -12,14 +12,15 @@ class TicketCreationForm(forms.ModelForm):
 
 
 class ReviewCreationForm(forms.ModelForm):
-    CHOICES = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
-    note = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
-
-    # todo réécrire le init et définir dedans le widget de rating
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        choices = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
+        self.fields["rating"].widget = forms.RadioSelect(choices=choices)
+        self.fields["rating"].label = "note"
 
     class Meta:
         model = Review
-        fields = ("headline", "note", "body")
+        fields = ("headline", "rating", "body")
 
 
 class SubscribeCreationForm(forms.ModelForm):

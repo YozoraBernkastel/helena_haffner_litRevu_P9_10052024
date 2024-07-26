@@ -1,13 +1,15 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
-    <h2>Inscription</h2>
-    {% if form.errors %}
-        {{ form.errors }}
-    {% endif %}
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <a href="{% url 'login' %}">Retourner</a>
-        <button type="submit" >S’inscrire</button>
-    </form>
+    <sector id="signupPage">
+        <h2>Inscription</h2>
+        {% if form.errors %}
+            {{ form.errors }}
+        {% endif %}
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <a href="{% url 'login' %}">Retourner</a>
+            <button type="submit" >S’inscrire</button>
+        </form>
+    </sector>
 {% endblock content %}
