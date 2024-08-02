@@ -1,18 +1,14 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
     <section>
-        {%if own_user %}
-            <h2>Modifier le ticket</h2>
+        <h2>Modifier le ticket</h2>
 
-            <form method="post">
-                {% csrf_token %}
-                {{ form }}
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
 
-                <button type="submit" >Envoyer</button>
-            </form>
-        {% else %}
-            <h1>Vous n'avez rien à faire ici è_é</h1>
-        {% endif %}
+            <button type="submit" >Envoyer</button>
+        </form>
 
     </section>
 

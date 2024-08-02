@@ -29,20 +29,43 @@ header{
         background-size: 122%;
         background-position: top;
 	background-attachment: fixed;
+        min-height: 150px;
+        border-bottom: #fff solid 3px;
+        border-radius: 40px;
 }
 
 main{ 
+        color: #fff;
+        text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
         width: 80%;
-        padding-top: 100px;
+        padding-top: 150px;
         min-height: 500px;
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(5, 5, 5, 0.5);
         border: #000 solid 1px;
+        font-size: 1.2rem;
+}
+
+main>section>div>article{
+        margin-bottom: 50px;
+}
+
+main a {
+        color:aquamarine;
+}
+
+input, button{
+        font-size: 1.2rem;
+        font-family: "Pacifico", cursive;
 }
 
 section {
         margin-left: auto;
         margin-right: auto;
         width: 60%;
+}
+
+h2{
+        font-size: 3.2rem;
 }
 
 ul{
@@ -71,7 +94,7 @@ header span{
 
 header h1{
         
-        font-size: 2.5rem;
+        font-size: 3rem;
         margin: 0;     
 }
 
@@ -83,24 +106,31 @@ header h1 a {
 header ul{
         width: 33%;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         margin-bottom: 0;
 }
 
 header li{
-        background-color: black; /*temporaire */
-        border: solid black 1px;
+        background-color: black;
+        border: solid #fff 1px;
         border-bottom: 0;
-        border-radius: 10px;
+        border-radius: 15px 15px 0 0;
         width: 25%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+        align-items: stretch;
 }
 
 header li a, header button{
         color: #fff;
         text-shadow: #000000 1px 5px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+header li a, header form{
+        margin: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;  
 }
 
 header button{
@@ -109,6 +139,7 @@ header button{
         outline: none;
         box-shadow: none;
         font-family: "Pacifico", cursive;
+        width: 100%;
 }
 
 header button:hover{
@@ -132,4 +163,47 @@ form p{
 
 img{
         width: 400px;
+}
+
+.reviewTicket{
+        display: flex;
+}
+
+
+.reviewTicket img{
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+.reviewContent, .ticketContent{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+}
+
+.date{
+        text-align: right;
+}
+
+.reviewHeadline{
+        font-size: 1.5rem;
+}
+
+.button{
+        color: #fff;
+        font-size: 1.2rem;
+        background-color: #000;
+        border: #fff solid 1.2px;
+        border-radius: 15px;
+        padding: 8px;     
+}
+
+.button:hover{
+        color: #000;
+        background-color: #fff;
+        border: #000 solid 1.5px;
+        text-shadow: #fff 1px 1px, #fff -1px 1px, #fff -1px -1px, #fff 1px -1px;
 }

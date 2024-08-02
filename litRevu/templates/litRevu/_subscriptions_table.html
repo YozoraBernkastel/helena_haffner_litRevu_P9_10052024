@@ -8,7 +8,7 @@
             <form action="" hx-delete="{% url 'litrevu:unsubscribe_to' sub.followed_user %}"  hx-target='#sub-table'>
                 <a href="{% url 'litrevu:user_posts' sub.followed_user.pk %}" class="subscribe_user">{{ sub.followed_user }}</a>
                 <a href="{% url 'litrevu:user_posts' sub.followed_user.pk %}" class="button">Son contenu</a>
-                <button class="unsubscribe_user">Se désabonner</button>
+                <button class="unsubscribe_user button">Se désabonner</button>
             </form>
         </li>
     {% endfor %}

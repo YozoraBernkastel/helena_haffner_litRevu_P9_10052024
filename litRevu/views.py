@@ -199,11 +199,6 @@ class TicketModification(UpdateView):
     def get_queryset(self):
         return self.request.user.tickets.all()
 
-    # def get_context_data(self, **kwargs):
-    #     ticket = Ticket.objects.get(pk=self.kwargs["pk"])
-    #     kwargs["own_user"] = self.request.user == ticket.user
-    #     return super().get_context_data(**kwargs)
-
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
 
@@ -215,11 +210,6 @@ class DeleteTicket(DeleteView):
 
     def get_queryset(self):
         return self.request.user.tickets.all()
-
-    # def get_context_data(self, **kwargs):
-    #     ticket = Ticket.objects.get(pk=self.kwargs["pk"])
-    #     kwargs["own_user"] = self.request.user == ticket.user
-    #     return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
@@ -246,11 +236,6 @@ class ReviewModification(UpdateView):
     def get_queryset(self):
         return self.request.user.reviews.all()
 
-    # def get_context_data(self, **kwargs):
-    #     review = Review.objects.get(pk=self.kwargs["pk"])
-    #     kwargs["own_user"] = self.request.user == review.user
-    #     return super().get_context_data(**kwargs)
-
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.pk}"
 
@@ -262,11 +247,6 @@ class DeleteReview(DeleteView):
 
     def get_queryset(self):
         return self.request.user.reviews.all()
-
-    # def get_context_data(self, **kwargs):
-    #     review = Review.objects.get(pk=self.kwargs["pk"])
-    #     kwargs["own_user"] = self.request.user == review.user
-    #     return super().get_context_data(**kwargs)
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.id}"
