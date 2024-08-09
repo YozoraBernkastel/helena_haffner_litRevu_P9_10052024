@@ -1,10 +1,12 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
-<h1>Créer un ticket</h1>
-<form method="post" enctype=multipart/form-data>
-    {% csrf_token %}
-    {{ form }}
+<div id="ticketCreation">
+    <h1>Créer un ticket</h1>
+    <form method="post" enctype=multipart/form-data>
+        {% csrf_token %}
+        {{ form }}
 
-    <button type="submit" >Envoyer</button>
-</form>
+        <button type="submit" class="button" >Envoyer</button>
+    </form>
+</div>
 {% endblock content %}

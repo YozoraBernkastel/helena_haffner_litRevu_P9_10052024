@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html lang="fr">
+    <head>
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'litRevu/style.css' %}">
-<html lang="en">
-<head>
+
     <meta charset="UTF-8">
     <title>LITReview</title>
 </head>
@@ -12,27 +13,28 @@
 
         <h1><a href="{% url 'flux' %}">LITReview</a></h1>
     {% if user.is_authenticated %}
-        <div>
-                {% if user.is_superuser %}
-                <ul>
-                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
-                    <li> <a href="{% url 'litrevu:ticket_creation' %}" class="reviewButton">Demander une critique</a></li>
-                    <li><a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Écrire une nouvelle critique</a></li>
-                </ul>
+        <div>                           
 
             <ul>
                 <li><a href="{% url 'flux' %}">Mon Flux</a></li>
                 <li><a href="{% url 'litrevu:user_posts' request.user.pk %}">Mes Posts</a></li>
-                <li><a href="{% url 'litrevu:sub_page' %}">Mes Abonnements</a></li>
-                <li>
-                   <form method="post" action="{% url 'auth:logout' %}">
-                  {% csrf_token %}
-                  <button type="submit">Se déconnecter</button>
-            </form>
-                </li>
+                <li><a href="{% url 'litrevu:sub_page' %}">Mes Abonnements</a></li>                    
             </ul>
 
-         {% endif %}
+            <ul>
+                {% if user.is_superuser %}
+                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                {% endif %}
+                <li> <a href="{% url 'litrevu:ticket_creation' %}" class="reviewButton">Demander une critique</a></li>
+                <li><a href="{% url 'litrevu:ticket_review_creation' %}" class="reviewButton">Écrire une nouvelle critique</a></li>
+                <li>
+                    <form method="post" action="{% url 'auth:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Déconnexion</button>
+                    </form>
+                </li>
+            </ul>
+           
         </div>
 
 

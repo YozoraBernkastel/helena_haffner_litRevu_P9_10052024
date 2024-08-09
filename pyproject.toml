@@ -12,6 +12,7 @@ django-debug-toolbar = "^4.3.0"
 django-extensions = "^3.2.3"
 pillow = "^10.3.0"
 django-htmx = "^1.18.0"
+flake8 = "^7.1.1"
 
 
 [build-system]

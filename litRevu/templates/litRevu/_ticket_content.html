@@ -1,4 +1,5 @@
-    <div>
+<article>
+    <div class="ticketOriginDetail">
         {% if request.user == ticket.user %}
             {% if not flux %}
                 <p>Votre Ticket</p>
@@ -12,26 +13,30 @@
                 <p class="type of post"><a href="{% url 'litrevu:user_posts' ticket.user.pk %}">{{ ticket.user }}</a> a demandé une critique</p>
             {% endif %}
 
-         {% endif %}
+        {% endif %}
 
         <p class="date">{{ ticket.time_created }}</p>
     </div>
-    <p class="book_title"><b>{{ ticket.title }}</b> de {{ ticket.author }}</p>
-    <p class="book_description">{{ ticket.description }}</p>
-    {% if ticket.image %}
-    <img src="{{ ticket.image.url }}" alt="couverture du livre {{ ticket.title }}">
-    {% endif %}
-    {% if not review %}
-        {% if flux or other_user %}
-            <a href="{% url 'litrevu:review_creation' ticket.pk %}">En écrire la critique</a>
-        {% endif %}
-    {% endif %}
 
-    {% if request.user == ticket.user and not flux and not review  %}
+    <h3 class="bookTitle"><b>{{ ticket.title }}</b> de {{ ticket.author }}</h3>
+    {% if ticket.image %}
+        <img src="{{ ticket.image.url }}" alt="couverture du livre {{ ticket.title }}">
+    {% endif %}
+    <div>
+        <p>Résumé:</p>
+        <p class="bookDescription">{{ ticket.description }}</p>    
+    </div>
+    
+        {% if flux or other_user %}
+            <a href="{% url 'litrevu:review_creation' ticket.pk %}" class="button">En écrire la critique</a>
+        {% endif %}
+   
+    {% if request.user == ticket.user and not flux  %}
        <div>
              <a href="{% url 'litrevu:ticket_modification' ticket.pk %}" class="button">Modifier</a>
              <a href="{% url 'litrevu:delete_ticket' ticket.pk %}" class="button">Supprimer</a>
        </div>
 
     {% endif %}
+</article>
 

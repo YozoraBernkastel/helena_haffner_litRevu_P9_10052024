@@ -5,14 +5,14 @@
     <section id="loginPage">
         <div>
             <h2>Inscrivez-vous maintenant</h2>
-                <a href="{% url 'auth:signup' %}" class="registration">S'inscrire</a>
+                <a href="{% url 'auth:signup' %}" class="registration button">S'inscrire</a>
         </div>
         <div>
             <h2>Connectez-vous</h2>
             <form method="post">
                 {{ form.as_p }}
                 {% csrf_token %}
-                <button type="submit" >Se connecter</button>
+                <button type="submit" class="button">Se connecter</button>
             </form>
         </div>
     </section>

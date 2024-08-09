@@ -29,20 +29,45 @@ header{
         background-size: 122%;
         background-position: top;
 	background-attachment: fixed;
+        min-height: 150px;
+        border-bottom: #fff solid 3px;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
 }
 
 main{ 
+        color: #fff;
+        text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
         width: 80%;
-        padding-top: 100px;
-        min-height: 500px;
-        background-color: rgba(255, 255, 255, 0.2);
+        padding-top: 150px;
+        min-height: 700px;
+        background-color: rgba(5, 5, 5, 0.5);
         border: #000 solid 1px;
+        font-size: 1.2rem;
+        padding-bottom: 50px;
+}
+
+main>section>div>article{
+        margin-bottom: 50px;
+}
+
+main a {
+        color:aquamarine;
+}
+
+input, button, textarea{
+        font-size: 1.2rem;
+        font-family: "Pacifico", cursive;
 }
 
 section {
         margin-left: auto;
         margin-right: auto;
         width: 60%;
+}
+
+h2{
+        font-size: 3.2rem;
 }
 
 ul{
@@ -71,7 +96,7 @@ header span{
 
 header h1{
         
-        font-size: 2.5rem;
+        font-size: 3rem;
         margin: 0;     
 }
 
@@ -83,24 +108,31 @@ header h1 a {
 header ul{
         width: 33%;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         margin-bottom: 0;
 }
 
 header li{
-        background-color: black; /*temporaire */
-        border: solid black 1px;
+        background-color: black;
+        border: solid #fff 1px;
         border-bottom: 0;
-        border-radius: 10px;
+        border-radius: 15px 15px 0 0;
         width: 25%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+        align-items: stretch;
 }
 
 header li a, header button{
         color: #fff;
         text-shadow: #000000 1px 5px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+header li a, header form{
+        margin: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;  
 }
 
 header button{
@@ -109,11 +141,13 @@ header button{
         outline: none;
         box-shadow: none;
         font-family: "Pacifico", cursive;
+        width: 100%;
 }
 
 header button:hover{
         cursor: pointer;
-}
+ }
+
 
 #loginPage{
         display: flex;
@@ -132,4 +166,160 @@ form p{
 
 img{
         width: 400px;
+}
+
+.reviewTicket{
+        display: flex;
+}
+
+
+.reviewTicket img{
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+.reviewContent, .ticketContent{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+}
+
+.date{
+        text-align: right;
+}
+
+.reviewHeadline{
+        font-size: 1.5rem;
+}
+
+.button{
+        color: #fff;
+        font-size: 1.2rem;
+        background-color: #000;
+        border: #fff solid 1.2px;
+        border-radius: 15px;
+        padding: 8px;     
+}
+
+.button:hover{
+        color: #000;
+        background-color: #fff;
+        border: #000 solid 1.5px;
+        text-shadow: #fff 1px 1px, #fff -1px 1px, #fff -1px -1px, #fff 1px -1px;
+        cursor: pointer;
+}
+
+#contentNav{
+        display: flex;
+        justify-content: space-around;
+}
+
+#contentNav a{
+        font-size: 1.8rem;
+}
+
+#pagination{
+        margin-top: 50px;
+}
+
+#pagination a{
+        margin: 1rem;
+}
+
+#ticketReviewCreation, #reviewCreation{
+        margin-bottom: 50px;
+        width: 100%;
+}
+
+#reviewCreation article{
+        margin-left: auto;
+        margin-right: auto;
+        width:90%;
+}
+
+#ticketReviewCreation form{
+        width: 100%;
+}
+
+#signupPage div, #ticketCreation form div, #ticketReviewCreation div, #reviewCreationForm div{
+        margin-left: auto;
+        margin-right: auto;
+        width: 35%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+} 
+
+#ticketCreation form div input, #ticketCreation form div textarea, 
+#reviewCreationForm input, #reviewCreationForm textarea,
+#ticketReviewCreation input, #ticketReviewCreation textarea{
+        width: 70%;
+}
+
+fieldset{
+        margin-left: auto;
+        width: 90%;
+        margin: 10px;
+}
+
+#id_image{
+        text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+#id_rating{
+        display: flex;
+        justify-content: center;
+        height: 60px;
+}
+
+#ticketModificationForm{
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+#reviewModificationForm{
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+#reviewModificationForm .button, #ticketModificationForm .button{
+        margin-top: 20px;
+}
+
+
+#ticketModificationForm div, #reviewModificationForm>div{        
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+}
+
+#ticketModificationForm div:not(:last-of-type), #reviewModificationForm>div {
+        display: flex;
+        justify-content: space-between;
+}
+
+#ticketModificationForm div:not(:last-of-type) input, #ticketModificationForm textarea, #reviewModificationForm input{
+        width: 80%;
+}
+
+.sub{
+        text-align: right;
+        margin-bottom: 20px;
+}
+
+.sub form{
+        margin-right: auto;
+        width: 80%;
+}
+
+.sub .button{
+        margin-right: 40px;
+}
+
+.subscribe_user{
+        margin-right: 50px;
 }

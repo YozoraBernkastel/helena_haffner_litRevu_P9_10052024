@@ -1,20 +1,35 @@
-<div>
-    <div>
-        {% if request.user == review.user %}
-            <p>Vous avez publié une critique</p>
-         {% elif request.user == review.ticket.user %}
-            <p><a href="{% url 'litrevu:user_posts' review.user.pk %}">{{ review.user }}</a> a répondu à votre demande</p>
-        {% else %}
-            <p class="type of post"><a href="{% url 'litrevu:user_posts' review.user.pk %}">{{ review.user }}</a> a publié une critique</p>
-         {% endif %}
 
-        <p class="date">{{ review.time_created }}</p>
+<article>
+    <p class="date">Le {{ review.time_created }}</p>
+        {% if request.user == review.user %}
+            <h3>Vous avez publié une critique de {{ review.ticket.title }}</h3>
+         {% elif request.user == review.ticket.user %}
+            <h3><a href="{% url 'litrevu:user_posts' review.user.pk %}">{{ review.user }}</a> a répondu à votre demande pour {{ review.ticket.title }}</h3>
+        {% else %}
+            <h3 class="type of post"><a href="{% url 'litrevu:user_posts' review.user.pk %}">{{ review.user }}</a> a publié une critique de {{ review.ticket.title }}</h3>
+         {% endif %}
+  
+    <div class="reviewTicket">
+
+        <div class="ticketContent">
+           
+            <h4 class="book_title"><b>{{ review.ticket.title }}</b> de {{ review.ticket.author }}</h4>
+            {% if review.ticket.image %}
+                <img src="{{ review.ticket.image.url }}" alt="couverture du livre {{ review.ticket.title }}">
+            {% endif %}
+            <p>Créateur du ticket : <a href="{% url 'litrevu:user_posts' review.ticket.user.pk %}">{{ review.ticket.user }}</a></p>
+
+        </div>
+       
+
+        <div class="reviewContent">          
+            <h5 class="reviewHeadline"><b>{{ review.headline }}</b> - {{ review.rating }}/5</h5>
+            <p class="reviewBody"> {{ review.body }}</p>            
+        </div>
+        
     </div>
-        <p class="review_headline"><b>{{ review.headline }}</b> - {{ review.rating }}</p>
-    <p class="review_body"> {{ review.body }}</p>
-    <div>
-        {% include 'litRevu/_ticket_content.html' with ticket=review.ticket %}
-    </div>
+    <h5>Résumé:</h5>
+    <p class="book_description">{{ review.ticket.description }}</p>
 
      {% if request.user == review.user and not flux %}
        <div>
@@ -23,5 +38,4 @@
        </div>
     {% endif %}
 
-
-</div>
+</article>
