@@ -23,10 +23,9 @@
         <img src="{{ ticket.image.url }}" alt="couverture du livre {{ ticket.title }}">
     {% endif %}
     <div>
-    <p>Résumé:</p>
-    <p class="bookDescription">{{ ticket.description }}</p>
-    
-</div>
+        <p>Résumé:</p>
+        <p class="bookDescription">{{ ticket.description }}</p>    
+    </div>
     
         {% if flux or other_user %}
             <a href="{% url 'litrevu:review_creation' ticket.pk %}" class="button">En écrire la critique</a>
@@ -37,7 +36,7 @@
              <a href="{% url 'litrevu:ticket_modification' ticket.pk %}" class="button">Modifier</a>
              <a href="{% url 'litrevu:delete_ticket' ticket.pk %}" class="button">Supprimer</a>
        </div>
-</article>
 
     {% endif %}
+</article>
 

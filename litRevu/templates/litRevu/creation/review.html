@@ -1,7 +1,7 @@
 {% extends 'litRevu/layout.html' %}
 {% block content %}
-<section class="reviewCreation">
-    <h1>Créer une critique</h1>
+<section id="reviewCreation">
+    <h2>Créer une critique</h2>
 
     <article>
         <p>Vous êtes en train de poster en réponse à</p>
@@ -9,15 +9,15 @@
 
     </article>
 
-    <form method="post">
+    <form method="post" id ="reviewCreationForm">
 
         <article>
-             <h1>Critique</h1>
+             <h2>Critique</h2>
             {% csrf_token %}
             {{ form }}
         </article>
 
-        <button type="submit" >Envoyer</button>
+        <button type="submit" class="button">Envoyer</button>
     </form>
 
 </section>

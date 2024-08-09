@@ -44,6 +44,7 @@ main{
         background-color: rgba(5, 5, 5, 0.5);
         border: #000 solid 1px;
         font-size: 1.2rem;
+        padding-bottom: 50px;
 }
 
 main>section>div>article{
@@ -54,7 +55,7 @@ main a {
         color:aquamarine;
 }
 
-input, button{
+input, button, textarea{
         font-size: 1.2rem;
         font-family: "Pacifico", cursive;
 }
@@ -227,16 +228,22 @@ img{
         margin: 1rem;
 }
 
-#ticketReviewCreation{
+#ticketReviewCreation, #reviewCreation{
         margin-bottom: 50px;
         width: 100%;
+}
+
+#reviewCreation article{
+        margin-left: auto;
+        margin-right: auto;
+        width:90%;
 }
 
 #ticketReviewCreation form{
         width: 100%;
 }
 
-#signupPage div, #ticketCreation form div, #ticketReviewCreation div{
+#signupPage div, #ticketCreation form div, #ticketReviewCreation div, #reviewCreationForm div{
         margin-left: auto;
         margin-right: auto;
         width: 35%;
@@ -245,17 +252,74 @@ img{
         margin-bottom: 20px;
 } 
 
-#ticketCreation form div input, #ticketCreation form div textarea, #ticketReviewCreation input, #ticketReviewCreation textarea{
+#ticketCreation form div input, #ticketCreation form div textarea, 
+#reviewCreationForm input, #reviewCreationForm textarea,
+#ticketReviewCreation input, #ticketReviewCreation textarea{
         width: 70%;
 }
 
-#ticketReviewCreation fieldset{
+fieldset{
         margin-left: auto;
         width: 90%;
+        margin: 10px;
 }
-
-
 
 #id_image{
         text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+#id_rating{
+        display: flex;
+        justify-content: center;
+        height: 60px;
+}
+
+#ticketModificationForm{
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+#reviewModificationForm{
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+#reviewModificationForm .button, #ticketModificationForm .button{
+        margin-top: 20px;
+}
+
+
+#ticketModificationForm div, #reviewModificationForm>div{        
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+}
+
+#ticketModificationForm div:not(:last-of-type), #reviewModificationForm>div {
+        display: flex;
+        justify-content: space-between;
+}
+
+#ticketModificationForm div:not(:last-of-type) input, #ticketModificationForm textarea, #reviewModificationForm input{
+        width: 80%;
+}
+
+.sub{
+        text-align: right;
+        margin-bottom: 20px;
+}
+
+.sub form{
+        margin-right: auto;
+        width: 80%;
+}
+
+.sub .button{
+        margin-right: 40px;
+}
+
+.subscribe_user{
+        margin-right: 50px;
 }
