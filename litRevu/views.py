@@ -60,7 +60,7 @@ def sub_to(request):
         already_sub = len(UserFollows.objects.filter(user=request.user, followed_user=user_to_follow)) > 0
 
         if same_user:
-            error_message = f"Vous ne pouvez pas vous suivre vous-même."
+            error_message = "Vous ne pouvez pas vous suivre vous-même."
         elif already_sub:
             error_message = f"Vous suivez déjà {follow}."
         else:
@@ -250,9 +250,3 @@ class DeleteReview(DeleteView):
 
     def get_success_url(self):
         return f"/litRevu/userPosts/{self.request.user.id}"
-
-
-
-
-
-

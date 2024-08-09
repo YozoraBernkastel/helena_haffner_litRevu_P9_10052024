@@ -21,7 +21,7 @@ class Review(models.Model):
         # validates that rating must be between 0 and 5
         validators=[MinValueValidator(0), MaxValueValidator(5)], verbose_name="note")
     headline = models.CharField(max_length=128, verbose_name="titre")
-    body = models.CharField(max_length=8192, blank=True, verbose_name="commentaire") # Textfield possible pour récupérer un texte plutôt qu'une maxi ligne
+    body = models.CharField(max_length=8192, blank=True, verbose_name="commentaire")
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")
     time_created = models.DateTimeField(auto_now_add=True)
