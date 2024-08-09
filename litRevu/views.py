@@ -12,7 +12,7 @@ from litRevu.models import Ticket, Review, UserFollows
 
 @method_decorator(login_required, name='dispatch')
 class Flux(ListView):
-    paginate_by = 10
+    paginate_by = 5
     template_name = "litRevu/flux.html"
 
     @staticmethod

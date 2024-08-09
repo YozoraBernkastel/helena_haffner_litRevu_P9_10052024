@@ -1,0 +1,4 @@
+[flake8]
+ignore = E501, W503
+exclude = .venv/,project/wsgi.py,project/asgi.py,*/migrations/*,manage.py,
+max-line-length = 200

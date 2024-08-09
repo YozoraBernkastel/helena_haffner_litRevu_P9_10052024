@@ -6,10 +6,10 @@
             {{ form.errors }}
         {% endif %}
         <form method="post">
-            {{ form.as_p }}
+            {{ form }}
             {% csrf_token %}
-            <a href="{% url 'login' %}">Retourner</a>
-            <button type="submit" >S’inscrire</button>
+            <a href="{% url 'login' %}" class="button">Retour</a>
+            <button type="submit"  class="button">S’inscrire</button>
         </form>
     </sector>
 {% endblock content %}

@@ -27,3 +27,4 @@ class SubscribeCreationForm(forms.ModelForm):
     class Meta:
         model = UserFollows
         fields = ("followed_user",)
+
