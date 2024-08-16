@@ -3,7 +3,7 @@
     <div>
         <h2>Modifier le ticket</h2>
 
-        <form method="post" id="ticketModificationForm">
+        <form method="post" id="ticketModificationForm" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form }}
 
