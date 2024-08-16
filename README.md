@@ -81,3 +81,9 @@ Vous pourrez alors soit créer un nouveau compte, soit utiliser l'un des trois d
 
         login: Lain
         mot de passe: iwa12345
+
+- _Troisième Compte Utilisateur (aucun contenu créé et aucun abonnement):_
+
+
+        login: Sunako
+        mot de passe: suna12345

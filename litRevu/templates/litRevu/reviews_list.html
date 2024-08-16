@@ -5,9 +5,14 @@
 
     <section>
         <h1>Vos Critiques</h1>
-        {% for review in page_obj %}
-            {% include 'litRevu/_review_content.html' %}
-        {% endfor %}
+        {% if page_obj %}
+            {% for review in page_obj %}
+                {% include 'litRevu/_review_content.html' %}
+            {% endfor %}
+        {% else %}
+            <p>Vous n'avez créé aucune critique.</p>
+        {% endif %}
+
     </section>
 
 
