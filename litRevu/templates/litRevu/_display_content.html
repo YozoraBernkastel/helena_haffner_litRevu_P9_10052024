@@ -1,20 +1,26 @@
 
         <div>
-            {% for post in page_obj %}
-                {% if post.content_type == "Ticket" %}
+            {% if page_obj %}
+                {% for post in page_obj %}
+                    {% if post.content_type == "Ticket" %}
 
-                    <article>
-                        {% include 'litRevu/_ticket_content.html' with ticket=post %}
-                    </article>
-                    {% elif post.content_type == "Reviews" %}
                         <article>
-                            <div>
-                                {% include 'litRevu/_review_content.html' with review=post %}
-                            </div>
+                            {% include 'litRevu/_ticket_content.html' with ticket=post %}
                         </article>
-                {% endif %}
-               
-            {% endfor %}
+                        {% elif post.content_type == "Reviews" %}
+                            <article>
+                                <div>
+                                    {% include 'litRevu/_review_content.html' with review=post %}
+                                </div>
+                            </article>
+                    {% endif %}
+
+                {% endfor %}
+            {% elif flux %}
+                <p>Ni vous, ni aucune personne que vous suivez n'a créé de contenu pour le moment.</p>
+            {% else %}
+                <p>Vous n'avez créé aucun contenu pour le moment.</p>
+            {% endif %}
 
             {% include 'litRevu/_page_navigation.html' %}
         </div>
