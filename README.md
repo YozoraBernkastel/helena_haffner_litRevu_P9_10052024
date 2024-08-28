@@ -50,6 +50,13 @@ Une fois l'environnement virtuel lancé, utilisez dans le terminal la commande:
 ```shell
 python manage.py migrate
 ```
+
+## Créer un compte administrateur
+Toujours depuis le terminal, utilisez la commande:
+```
+python manage.py createsuperuser
+```
+
 ## Lancer le serveur en local
 
 Toujours dans l'environnement virtuel, et une fois la base de données configurée, dans le terminal, entrez la commande:
