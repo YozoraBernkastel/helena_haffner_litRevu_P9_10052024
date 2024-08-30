@@ -32,19 +32,6 @@ Sortir de l'environnement virtuel :
 exit
 ```
 
-## Lancer le programme depuis l'environnement virtuel
-Dans le terminal, à la racine du projet :
-```shell
-python3 main.py
-```
-
-## Lancer le programme sans l'environnement virtuel
-Dans le terminal, à la racine du projet :
-```shell
-poetry run python3 main.py
-```
-
-
 ## Installer la base de données
 Une fois l'environnement virtuel lancé, utilisez dans le terminal la commande:
 ```shell
